@@ -28,9 +28,7 @@ public class PersonController {
     }
 
     @DeleteMapping("/person")
-    public void deletePerson(@RequestBody ObjectNode node) {
-        if (node.has("firstName") && node.has("lastName")) {
-            personService.deletePerson(node.get("firstName").asText(), node.get("lastName").asText());
-        }
+    public void deletePerson(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName) {
+        personService.deletePerson(firstName, lastName);
     }
 }

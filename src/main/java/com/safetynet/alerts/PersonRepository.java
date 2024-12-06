@@ -10,6 +10,11 @@ import java.util.ListIterator;
 public class PersonRepository {
     private final List<Person> persons = new ArrayList<Person>();
 
+    public void init(List<Person> values) {
+        persons.clear();
+        persons.addAll(values);
+    };
+
     public List<Person> getAll() {
         return persons;
     };
