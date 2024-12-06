@@ -20,7 +20,12 @@ public class PersonRepository {
     };
 
     public void createPerson(Person person) {
-        persons.add(person);
+        try {
+            persons.add(person);
+            DBHandle.editPersons(persons);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     };
 
     private ListIterator<Person> findPerson(String firstName, String lastName) {
@@ -37,14 +42,24 @@ public class PersonRepository {
     public void editPerson(Person person) {
         ListIterator<Person> iterator = findPerson(person.firstName(), person.lastName());
         if (iterator != null) {
-            iterator.set(person);
+            try {
+                iterator.set(person);
+                DBHandle.editPersons(persons);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
         }
     };
 
     public void deletePerson(String firstName, String lastName) {
         ListIterator<Person> iterator = findPerson(firstName, lastName);
         if (iterator != null) {
-            iterator.remove();
+            try {
+                iterator.remove();
+                DBHandle.editPersons(persons);
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
         }
     };
 }
