@@ -19,6 +19,9 @@ public class DBHandle {
         try {
             StringBuilder json_data = new StringBuilder();
             File f = new File(json_path);
+            if (!f.isFile()) {
+                f = new File("./resources/og_data.json");
+            }
             Scanner reader = new Scanner(f);
             while (reader.hasNextLine()) {
                 json_data.append(reader.nextLine());
