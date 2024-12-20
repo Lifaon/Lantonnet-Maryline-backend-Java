@@ -19,7 +19,7 @@ public class PersonRepository {
     private final List<Person> _persons = new ArrayList<>();
 
     @PostConstruct
-    public void init() throws JsonProcessingException {
+    private void init() throws JsonProcessingException {
         final Person[] values = _dbHandle.get(_dbKey, Person[].class);
         if (values != null) {
             _persons.addAll(Arrays.asList(values));
