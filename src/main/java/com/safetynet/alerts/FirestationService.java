@@ -8,14 +8,14 @@ import java.util.List;
 @Service
 public class FirestationService {
     @Autowired
-    private FirestationRepository firestationRepository;
+    private FirestationRepository _firestationRepository;
 
     public List<Firestation> getAll() {
-        return firestationRepository.getAll();
+        return _firestationRepository.getAll();
     };
 
     public void createFirestation(Firestation p) {
-        firestationRepository.createFirestation(p);
+        _firestationRepository.createFirestation(p);
     };
 
 }

@@ -8,14 +8,14 @@ import java.util.List;
 @Service
 public class MedicalRecordService {
     @Autowired
-    private MedicalRecordRepository medicalRecordRepository;
+    private MedicalRecordRepository _medicalRecordRepository;
 
     public List<MedicalRecord> getAll() {
-        return medicalRecordRepository.getAll();
+        return _medicalRecordRepository.getAll();
     };
 
     public void createMedicalRecord(MedicalRecord p) {
-        medicalRecordRepository.createMedicalRecord(p);
+        _medicalRecordRepository.createMedicalRecord(p);
     };
 
 }

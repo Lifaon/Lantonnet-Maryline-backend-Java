@@ -9,15 +9,15 @@ import java.util.List;
 public class FirestationController {
 
     @Autowired
-    FirestationService firestationService;
+    FirestationService _firestationService;
 
     @GetMapping("/firestation")
     public List<Firestation> getAll() {
-        return firestationService.getAll();
+        return _firestationService.getAll();
     }
 
     @PostMapping("/firestation")
     public void createFirestation(@RequestBody Firestation firestation) {
-        firestationService.createFirestation(firestation);
+        _firestationService.createFirestation(firestation);
     }
 }

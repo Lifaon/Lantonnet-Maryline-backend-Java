@@ -10,25 +10,25 @@ import java.util.List;
 public class PersonController {
 
     @Autowired
-    PersonService personService;
+    PersonService _personService;
 
     @GetMapping("/person")
     public List<Person> getAll() {
-        return personService.getAll();
+        return _personService.getAll();
     }
 
     @PostMapping("/person")
     public void createPerson(@RequestBody Person person) {
-        personService.createPerson(person);
+        _personService.createPerson(person);
     }
 
     @PutMapping("/person")
     public void editPerson(@RequestBody Person person) {
-        personService.editPerson(person);
+        _personService.editPerson(person);
     }
 
     @DeleteMapping("/person")
     public void deletePerson(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName) {
-        personService.deletePerson(firstName, lastName);
+        _personService.deletePerson(firstName, lastName);
     }
 }

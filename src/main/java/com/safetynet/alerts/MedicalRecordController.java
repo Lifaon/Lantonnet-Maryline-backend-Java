@@ -12,15 +12,15 @@ import java.util.List;
 public class MedicalRecordController {
 
     @Autowired
-    MedicalRecordService medicalRecordService;
+    MedicalRecordService _medicalRecordService;
 
     @GetMapping("/medicalRecord")
     public List<MedicalRecord> getAll() {
-        return medicalRecordService.getAll();
+        return _medicalRecordService.getAll();
     }
 
     @PostMapping("/medicalRecord")
     public void createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-        medicalRecordService.createMedicalRecord(medicalRecord);
+        _medicalRecordService.createMedicalRecord(medicalRecord);
     }
 }

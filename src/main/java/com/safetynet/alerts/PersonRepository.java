@@ -14,33 +14,33 @@ import java.util.ListIterator;
 public class PersonRepository {
 
     @Autowired
-    private DBHandle dbHandle;
-    private final String dbKey = "persons";
-    private final List<Person> persons = new ArrayList<>();
+    private DBHandle _dbHandle;
+    private final String _dbKey = "persons";
+    private final List<Person> _persons = new ArrayList<>();
 
     @PostConstruct
     public void init() throws JsonProcessingException {
-        final Person[] values = dbHandle.get(dbKey, Person[].class);
+        final Person[] values = _dbHandle.get(_dbKey, Person[].class);
         if (values != null) {
-            persons.addAll(Arrays.asList(values));
+            _persons.addAll(Arrays.asList(values));
         }
     }
 
     public List<Person> getAll() {
-        return persons;
+        return _persons;
     };
 
     public void createPerson(Person person) {
         try {
-            persons.add(person);
-            dbHandle.set(dbKey, persons);
+            _persons.add(person);
+            _dbHandle.set(_dbKey, _persons);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     };
 
     private ListIterator<Person> findPerson(String firstName, String lastName) {
-        ListIterator<Person> iterator = persons.listIterator();
+        ListIterator<Person> iterator = _persons.listIterator();
         while (iterator.hasNext()) {
             Person next = iterator.next();
             if (next.firstName().equals(firstName) && next.lastName().equals(lastName)) {
@@ -55,7 +55,7 @@ public class PersonRepository {
         if (iterator != null) {
             try {
                 iterator.set(person);
-                dbHandle.set(dbKey, persons);
+                _dbHandle.set(_dbKey, _persons);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -67,7 +67,7 @@ public class PersonRepository {
         if (iterator != null) {
             try {
                 iterator.remove();
-                dbHandle.set(dbKey, persons);
+                _dbHandle.set(_dbKey, _persons);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }

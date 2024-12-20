@@ -13,26 +13,26 @@ import java.util.List;
 public class FirestationRepository {
 
     @Autowired
-    private DBHandle dbHandle;
-    private final String dbKey = "firestations";
-    private final List<Firestation> firestations = new ArrayList<>();
+    private DBHandle _dbHandle;
+    private final String _dbKey = "firestations";
+    private final List<Firestation> _firestations = new ArrayList<>();
 
     @PostConstruct
     private void init() throws JsonProcessingException {
-        final Firestation[] values = dbHandle.get(dbKey, Firestation[].class);
+        final Firestation[] values = _dbHandle.get(_dbKey, Firestation[].class);
         if (values != null) {
-            firestations.addAll(Arrays.asList(values));
+            _firestations.addAll(Arrays.asList(values));
         }
     }
 
     public List<Firestation> getAll() {
-        return firestations;
+        return _firestations;
     };
 
     public void createFirestation(Firestation firestation) {
         try {
-            firestations.add(firestation);
-            dbHandle.set(dbKey, firestations);
+            _firestations.add(firestation);
+            _dbHandle.set(_dbKey, _firestations);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

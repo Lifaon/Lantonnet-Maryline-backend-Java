@@ -13,26 +13,26 @@ import java.util.List;
 public class MedicalRecordRepository {
 
     @Autowired
-    private DBHandle dbHandle;
-    private final String dbKey = "medicalrecords";
-    private final List<MedicalRecord> medicalRecords = new ArrayList<>();
+    private DBHandle _dbHandle;
+    private final String _dbKey = "medicalrecords";
+    private final List<MedicalRecord> _medicalRecords = new ArrayList<>();
 
     @PostConstruct
     private void init() throws JsonProcessingException {
-        final MedicalRecord[] values = dbHandle.get(dbKey, MedicalRecord[].class);
+        final MedicalRecord[] values = _dbHandle.get(_dbKey, MedicalRecord[].class);
         if (values != null) {
-            medicalRecords.addAll(Arrays.asList(values));
+            _medicalRecords.addAll(Arrays.asList(values));
         }
     }
 
     public List<MedicalRecord> getAll() {
-        return medicalRecords;
+        return _medicalRecords;
     };
 
     public void createMedicalRecord(MedicalRecord medicalRecord) {
         try {
-            medicalRecords.add(medicalRecord);
-            dbHandle.set(dbKey, medicalRecords);
+            _medicalRecords.add(medicalRecord);
+            _dbHandle.set(_dbKey, _medicalRecords);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

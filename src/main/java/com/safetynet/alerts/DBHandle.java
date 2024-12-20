@@ -13,13 +13,13 @@ import java.lang.*;
 @Configuration()
 public class DBHandle {
 
-    final private String json_path = "./resources/data.json";
-    final private ObjectMapper mapper = new ObjectMapper();
-    private ObjectNode nodes;
+    final private String _json_path = "./resources/data.json";
+    final private ObjectMapper _mapper = new ObjectMapper();
+    private ObjectNode _nodes;
 
     DBHandle() {
         try {
-            File f = new File(json_path);
+            File f = new File(_json_path);
             if (!f.isFile()) {
                 f = new File("./resources/og_data.json");
             }
@@ -29,7 +29,7 @@ public class DBHandle {
                 json_data.append(reader.nextLine());
             }
             reader.close();
-            nodes = (ObjectNode) mapper.readTree(json_data.toString());
+            _nodes = (ObjectNode) _mapper.readTree(json_data.toString());
         } catch (Exception e) {
             System.err.println(e.getMessage());
             System.exit(1);
@@ -37,21 +37,21 @@ public class DBHandle {
     }
 
     public <T> T get(String key, Class<T> type) throws JsonProcessingException {
-        return mapper.treeToValue(nodes.get(key), type);
+        return _mapper.treeToValue(_nodes.get(key), type);
     }
 
     public <T> void set(String key, T value) throws IOException {
 
-        if (nodes.has(key)) {
-            nodes.set(key, mapper.convertValue(value, JsonNode.class));
+        if (_nodes.has(key)) {
+            _nodes.set(key, _mapper.convertValue(value, JsonNode.class));
         } else {
             System.err.println("Key " + key + " not found");
             return;
         }
 
-        FileWriter file = new FileWriter(json_path);
+        FileWriter file = new FileWriter(_json_path);
         BufferedWriter writer = new BufferedWriter(file);
-        writer.write(nodes.toPrettyString());
+        writer.write(_nodes.toPrettyString());
         writer.close();
         file.close();
     }

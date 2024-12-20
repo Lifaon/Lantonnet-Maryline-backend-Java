@@ -8,21 +8,21 @@ import java.util.List;
 @Service
 public class PersonService {
     @Autowired
-    private PersonRepository personRepository;
+    private PersonRepository _personRepository;
 
     public List<Person> getAll() {
-        return personRepository.getAll();
+        return _personRepository.getAll();
     };
 
     public void createPerson(Person p) {
-        personRepository.createPerson(p);
+        _personRepository.createPerson(p);
     };
 
     public void editPerson(Person p) {
-        personRepository.editPerson(p);
+        _personRepository.editPerson(p);
     };
 
     public void deletePerson(String firstName, String lastName) {
-        personRepository.deletePerson(firstName, lastName);
+        _personRepository.deletePerson(firstName, lastName);
     };
 }
