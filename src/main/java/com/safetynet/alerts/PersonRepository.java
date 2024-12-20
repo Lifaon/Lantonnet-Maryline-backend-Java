@@ -1,7 +1,6 @@
 package com.safetynet.alerts;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -21,9 +20,9 @@ public class PersonRepository {
 
     @PostConstruct
     public void init() throws JsonProcessingException {
-        final JsonNode node = dbHandle.getNode(dbKey);
-        if (node != null && node.isArray()) {
-            persons.addAll(Arrays.asList(dbHandle.getMapper().treeToValue(node, Person[].class)));
+        final Person[] values = dbHandle.get(dbKey, Person[].class);
+        if (values != null) {
+            persons.addAll(Arrays.asList(values));
         }
     }
 
@@ -34,7 +33,7 @@ public class PersonRepository {
     public void createPerson(Person person) {
         try {
             persons.add(person);
-            dbHandle.editNode(dbKey, persons);
+            dbHandle.set(dbKey, persons);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
@@ -56,7 +55,7 @@ public class PersonRepository {
         if (iterator != null) {
             try {
                 iterator.set(person);
-                dbHandle.editNode(dbKey, persons);
+                dbHandle.set(dbKey, persons);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }
@@ -68,7 +67,7 @@ public class PersonRepository {
         if (iterator != null) {
             try {
                 iterator.remove();
-                dbHandle.editNode(dbKey, persons);
+                dbHandle.set(dbKey, persons);
             } catch (Exception e) {
                 System.err.println(e.getMessage());
             }

@@ -1,5 +1,6 @@
 package com.safetynet.alerts;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.*;
 import java.util.*;
+import java.lang.*;
 
 @Configuration()
 public class DBHandle {
@@ -17,11 +19,11 @@ public class DBHandle {
 
     DBHandle() {
         try {
-            StringBuilder json_data = new StringBuilder();
             File f = new File(json_path);
             if (!f.isFile()) {
                 f = new File("./resources/og_data.json");
             }
+            StringBuilder json_data = new StringBuilder();
             Scanner reader = new Scanner(f);
             while (reader.hasNextLine()) {
                 json_data.append(reader.nextLine());
@@ -34,15 +36,11 @@ public class DBHandle {
         }
     }
 
-    public ObjectMapper getMapper() {
-        return mapper;
+    public <T> T get(String key, Class<T> type) throws JsonProcessingException {
+        return mapper.treeToValue(nodes.get(key), type);
     }
 
-    public JsonNode getNode(String key) {
-        return nodes.get(key);
-    }
-
-    public <T> void editNode(String key, T value) throws IOException {
+    public <T> void set(String key, T value) throws IOException {
 
         if (nodes.has(key)) {
             nodes.set(key, mapper.convertValue(value, JsonNode.class));
