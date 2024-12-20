@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 @Repository
 public class FirestationRepository {
@@ -33,6 +34,53 @@ public class FirestationRepository {
         try {
             _firestations.add(firestation);
             _dbHandle.set(_dbKey, _firestations);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    };
+
+    private ListIterator<Firestation> _findFirestation(String address) {
+        ListIterator<Firestation> iterator = _firestations.listIterator();
+        while (iterator.hasNext()) {
+            Firestation next = iterator.next();
+            if (next.address().equals(address)) {
+                return iterator;
+            }
+        }
+        return null;
+    }
+
+    public void editFirestation(Firestation firestation) {
+        try {
+            ListIterator<Firestation> it = _firestations.listIterator();
+            while (it.hasNext()) {
+                Firestation next = it.next();
+                if (next.address().equals(firestation.address())) {
+                    it.set(firestation);
+                    _dbHandle.set(_dbKey, _firestations);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    };
+
+    public void deleteAddress(String address) {
+        try {
+            if (_firestations.removeIf(e -> e.address().equals(address))) {
+                _dbHandle.set(_dbKey, _firestations);
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    };
+
+    public void deleteStation(String station) {
+        try {
+            if (_firestations.removeIf(e -> e.station().equals(station))) {
+                _dbHandle.set(_dbKey, _firestations);
+            }
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

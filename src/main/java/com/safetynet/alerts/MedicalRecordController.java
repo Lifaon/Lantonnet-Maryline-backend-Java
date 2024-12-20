@@ -1,10 +1,7 @@
 package com.safetynet.alerts;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +19,15 @@ public class MedicalRecordController {
     @PostMapping("/medicalRecord")
     public void createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
         _medicalRecordService.createMedicalRecord(medicalRecord);
+    }
+
+    @PutMapping("/medicalRecord")
+    public void editMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+        _medicalRecordService.editMedicalRecord(medicalRecord);
+    }
+
+    @DeleteMapping("/medicalRecord")
+    public void deleteMedicalRecord(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName) {
+        _medicalRecordService.deleteMedicalRecord(firstName, lastName);
     }
 }

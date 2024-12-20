@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
 
 @Repository
 public class MedicalRecordRepository {
@@ -33,6 +34,32 @@ public class MedicalRecordRepository {
         try {
             _medicalRecords.add(medicalRecord);
             _dbHandle.set(_dbKey, _medicalRecords);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    };
+
+    public void editMedicalRecord(MedicalRecord medicalRecord) {
+        try {
+            ListIterator<MedicalRecord> it = _medicalRecords.listIterator();
+            while (it.hasNext()) {
+                MedicalRecord r = it.next();
+                if (r.firstName().equals(medicalRecord.firstName()) && r.lastName().equals(medicalRecord.lastName())) {
+                    it.set(medicalRecord);
+                    _dbHandle.set(_dbKey, _medicalRecords);
+                    return;
+                }
+            }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    };
+
+    public void deleteMedicalRecord(String firstName, String lastName) {
+        try {
+            if (_medicalRecords.removeIf(e -> e.firstName().equals(firstName) && e.lastName().equals(lastName))) {
+                _dbHandle.set(_dbKey, _medicalRecords);
+            }
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }

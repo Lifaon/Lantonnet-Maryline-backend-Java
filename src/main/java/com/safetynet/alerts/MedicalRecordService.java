@@ -18,4 +18,11 @@ public class MedicalRecordService {
         _medicalRecordRepository.createMedicalRecord(p);
     };
 
+    public void editMedicalRecord(MedicalRecord p) {
+        _medicalRecordRepository.editMedicalRecord(p);
+    };
+
+    public void deleteMedicalRecord(String firstName, String lastName) {
+        _medicalRecordRepository.deleteMedicalRecord(firstName, lastName);
+    };
 }

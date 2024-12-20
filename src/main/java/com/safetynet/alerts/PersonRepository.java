@@ -39,38 +39,29 @@ public class PersonRepository {
         }
     };
 
-    private ListIterator<Person> findPerson(String firstName, String lastName) {
-        ListIterator<Person> iterator = _persons.listIterator();
-        while (iterator.hasNext()) {
-            Person next = iterator.next();
-            if (next.firstName().equals(firstName) && next.lastName().equals(lastName)) {
-                return iterator;
-            }
-        }
-        return null;
-    };
-
     public void editPerson(Person person) {
-        ListIterator<Person> iterator = findPerson(person.firstName(), person.lastName());
-        if (iterator != null) {
-            try {
-                iterator.set(person);
-                _dbHandle.set(_dbKey, _persons);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
+        try {
+            ListIterator<Person> it = _persons.listIterator();
+            while (it.hasNext()) {
+                Person p = it.next();
+                if (p.firstName().equals(person.firstName()) && p.lastName().equals(person.lastName())) {
+                    it.set(person);
+                    _dbHandle.set(_dbKey, _persons);
+                    return;
+                }
             }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     };
 
     public void deletePerson(String firstName, String lastName) {
-        ListIterator<Person> iterator = findPerson(firstName, lastName);
-        if (iterator != null) {
-            try {
-                iterator.remove();
+        try {
+            if (_persons.removeIf(e -> e.firstName().equals(firstName) && e.lastName().equals(lastName))) {
                 _dbHandle.set(_dbKey, _persons);
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
             }
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
         }
     };
 }

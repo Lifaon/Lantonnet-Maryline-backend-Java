@@ -18,4 +18,16 @@ public class FirestationService {
         _firestationRepository.createFirestation(p);
     };
 
+    public void editFirestation(Firestation p) {
+        _firestationRepository.editFirestation(p);
+    };
+
+    public void deleteAddress(String address) {
+        _firestationRepository.deleteAddress(address);
+    };
+
+    public void deleteStation(String station) {
+        _firestationRepository.deleteStation(station);
+    };
+
 }
