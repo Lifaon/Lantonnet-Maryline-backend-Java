@@ -22,7 +22,7 @@ public class MedicalRecordService {
         _medicalRecordRepository.editMedicalRecord(p);
     };
 
-    public void deleteMedicalRecord(String firstName, String lastName) {
-        _medicalRecordRepository.deleteMedicalRecord(firstName, lastName);
+    public void deleteMedicalRecord(PersonName name) {
+        _medicalRecordRepository.deleteMedicalRecord(name);
     };
 }

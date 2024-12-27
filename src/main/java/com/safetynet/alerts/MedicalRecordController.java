@@ -28,6 +28,6 @@ public class MedicalRecordController {
 
     @DeleteMapping("/medicalRecord")
     public void deleteMedicalRecord(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName) {
-        _medicalRecordService.deleteMedicalRecord(firstName, lastName);
+        _medicalRecordService.deleteMedicalRecord(new PersonName(firstName, lastName));
     }
 }

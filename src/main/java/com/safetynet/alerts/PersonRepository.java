@@ -5,10 +5,7 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 @Repository
 public class PersonRepository {
@@ -30,19 +27,17 @@ public class PersonRepository {
         return _persons;
     };
 
-    private int _findPersonID(String firstName, String lastName) {
-        ListIterator<Person> it = _persons.listIterator();
-        while (it.hasNext()) {
-            final Person p = it.next();
-            if (p.firstName().equals(firstName) && p.lastName().equals(lastName)) {
-                return it.nextIndex()-1;
+    private int _findPersonID(PersonName name) {
+        for (final Person p : _persons) {
+            if (p.firstName.equals(name.firstName) && p.lastName.equals(name.lastName)) {
+                return _persons.indexOf(p);
             }
         }
         return -1;
-    };
+    }
 
-    public Person getPerson(String firstName, String lastName) {
-        int id = _findPersonID(firstName, lastName);
+    public Person getPerson(PersonName name) {
+        int id =  _findPersonID(name);
         if (id > 0) {
             return _persons.get(id);
         }
@@ -60,20 +55,25 @@ public class PersonRepository {
 
     public void editPerson(Person person) {
         try {
-            int id = _findPersonID(person.firstName(), person.lastName());
+            int id = _findPersonID(person);
             if (id > 0) {
                 _persons.set(id, person);
+                _dbHandle.set(_dbKey, _persons);
+            }
+            else {
+                System.err.println("No such person");
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     };
 
-    public void deletePerson(String firstName, String lastName) {
+    public void deletePerson(PersonName name) {
         try {
-            int id = _findPersonID(firstName, lastName);
+            int id = _findPersonID(name);
             if (id > 0) {
                 _persons.remove(id);
+                _dbHandle.set(_dbKey, _persons);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());

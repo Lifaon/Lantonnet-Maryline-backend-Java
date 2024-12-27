@@ -22,7 +22,7 @@ public class PersonService {
         _personRepository.editPerson(p);
     };
 
-    public void deletePerson(String firstName, String lastName) {
-        _personRepository.deletePerson(firstName, lastName);
+    public void deletePerson(PersonName name) {
+        _personRepository.deletePerson(name);
     };
 }

@@ -31,21 +31,16 @@ public class FirestationService {
 
         final CoveredPeople coveredPeople = new CoveredPeople();
         for (final var person : people) {
-            if (addresses.contains(person.address())) {
-                coveredPeople.people.add(new CustomPerson(
-                    person.firstName(),
-                    person.lastName(),
-                    person.address(),
-                    person.phone()
-                ));
+            if (addresses.contains(person.address)) {
+                coveredPeople.people.add(person);
             }
         }
 
         final LocalDate today = LocalDate.now();
-        for (final var coveredPerson : coveredPeople.people) {
+        for (final var person : coveredPeople.people) {
 
-            final MedicalRecord record = _medicalRecordRepository.getMedicalRecord(coveredPerson.firstName(), coveredPerson.lastName());
-            final LocalDate birth = LocalDate.parse(record.birthdate(), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+            final MedicalRecord record = _medicalRecordRepository.getMedicalRecord(person);
+            final LocalDate birth = LocalDate.parse(record.birthdate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
 
             if (java.time.temporal.ChronoUnit.YEARS.between(birth, today) < 18) {
                 coveredPeople.children++;

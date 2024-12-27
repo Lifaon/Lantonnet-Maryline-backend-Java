@@ -29,6 +29,6 @@ public class PersonController {
 
     @DeleteMapping("/person")
     public void deletePerson(@RequestParam(name = "firstName") String firstName, @RequestParam(name = "lastName") String lastName) {
-        _personService.deletePerson(firstName, lastName);
+        _personService.deletePerson(new PersonName(firstName, lastName));
     }
 }

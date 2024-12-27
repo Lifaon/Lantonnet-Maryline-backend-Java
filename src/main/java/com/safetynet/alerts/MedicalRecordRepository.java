@@ -30,19 +30,17 @@ public class MedicalRecordRepository {
         return _medicalRecords;
     };
 
-    private int _findMedicalRecordID(String firstName, String lastName) {
-        ListIterator<MedicalRecord> it = _medicalRecords.listIterator();
-        while (it.hasNext()) {
-            MedicalRecord p = it.next();
-            if (p.firstName().equals(firstName) && p.lastName().equals(lastName)) {
-                return it.nextIndex()-1;
+    private int _findMedicalRecordID(PersonName name) {
+        for (final MedicalRecord r : _medicalRecords) {
+            if (r.firstName.equals(name.firstName) && r.lastName.equals(name.lastName)) {
+                return _medicalRecords.indexOf(r);
             }
         }
         return -1;
     };
 
-    public MedicalRecord getMedicalRecord(String firstName, String lastName) {
-        int id = _findMedicalRecordID(firstName, lastName);
+    public MedicalRecord getMedicalRecord(PersonName name) {
+        int id = _findMedicalRecordID(name);
         if (id > 0) {
             return _medicalRecords.get(id);
         }
@@ -60,20 +58,22 @@ public class MedicalRecordRepository {
 
     public void editMedicalRecord(MedicalRecord medicalRecord) {
         try {
-            int id = _findMedicalRecordID(medicalRecord.firstName(), medicalRecord.lastName());
+            int id = _findMedicalRecordID(medicalRecord);
             if (id > 0) {
                 _medicalRecords.set(id, medicalRecord);
+                _dbHandle.set(_dbKey, _medicalRecords);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     };
 
-    public void deleteMedicalRecord(String firstName, String lastName) {
+    public void deleteMedicalRecord(PersonName name) {
         try {
-            int id = _findMedicalRecordID(firstName, lastName);
+            int id = _findMedicalRecordID(name);
             if (id > 0) {
                 _medicalRecords.remove(id);
+                _dbHandle.set(_dbKey, _medicalRecords);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
