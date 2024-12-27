@@ -12,8 +12,8 @@ public class FirestationController {
     FirestationService _firestationService;
 
     @GetMapping("/firestation")
-    public List<Firestation> getAll() {
-        return _firestationService.getAll();
+    public CoveredPeople getCoveredPeople(@RequestParam(value = "stationNumber") String stationNumber) {
+        return _firestationService.getCoveredPeople(stationNumber);
     }
 
     @PostMapping("/firestation")

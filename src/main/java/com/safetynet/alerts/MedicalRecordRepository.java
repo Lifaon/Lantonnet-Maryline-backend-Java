@@ -30,6 +30,25 @@ public class MedicalRecordRepository {
         return _medicalRecords;
     };
 
+    private int _findMedicalRecordID(String firstName, String lastName) {
+        ListIterator<MedicalRecord> it = _medicalRecords.listIterator();
+        while (it.hasNext()) {
+            MedicalRecord p = it.next();
+            if (p.firstName().equals(firstName) && p.lastName().equals(lastName)) {
+                return it.nextIndex()-1;
+            }
+        }
+        return -1;
+    };
+
+    public MedicalRecord getMedicalRecord(String firstName, String lastName) {
+        int id = _findMedicalRecordID(firstName, lastName);
+        if (id > 0) {
+            return _medicalRecords.get(id);
+        }
+        return null;
+    }
+
     public void createMedicalRecord(MedicalRecord medicalRecord) {
         try {
             _medicalRecords.add(medicalRecord);
@@ -41,14 +60,9 @@ public class MedicalRecordRepository {
 
     public void editMedicalRecord(MedicalRecord medicalRecord) {
         try {
-            ListIterator<MedicalRecord> it = _medicalRecords.listIterator();
-            while (it.hasNext()) {
-                MedicalRecord r = it.next();
-                if (r.firstName().equals(medicalRecord.firstName()) && r.lastName().equals(medicalRecord.lastName())) {
-                    it.set(medicalRecord);
-                    _dbHandle.set(_dbKey, _medicalRecords);
-                    return;
-                }
+            int id = _findMedicalRecordID(medicalRecord.firstName(), medicalRecord.lastName());
+            if (id > 0) {
+                _medicalRecords.set(id, medicalRecord);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -57,8 +71,9 @@ public class MedicalRecordRepository {
 
     public void deleteMedicalRecord(String firstName, String lastName) {
         try {
-            if (_medicalRecords.removeIf(e -> e.firstName().equals(firstName) && e.lastName().equals(lastName))) {
-                _dbHandle.set(_dbKey, _medicalRecords);
+            int id = _findMedicalRecordID(firstName, lastName);
+            if (id > 0) {
+                _medicalRecords.remove(id);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());

@@ -30,6 +30,25 @@ public class PersonRepository {
         return _persons;
     };
 
+    private int _findPersonID(String firstName, String lastName) {
+        ListIterator<Person> it = _persons.listIterator();
+        while (it.hasNext()) {
+            final Person p = it.next();
+            if (p.firstName().equals(firstName) && p.lastName().equals(lastName)) {
+                return it.nextIndex()-1;
+            }
+        }
+        return -1;
+    };
+
+    public Person getPerson(String firstName, String lastName) {
+        int id = _findPersonID(firstName, lastName);
+        if (id > 0) {
+            return _persons.get(id);
+        }
+        return null;
+    };
+
     public void createPerson(Person person) {
         try {
             _persons.add(person);
@@ -41,14 +60,9 @@ public class PersonRepository {
 
     public void editPerson(Person person) {
         try {
-            ListIterator<Person> it = _persons.listIterator();
-            while (it.hasNext()) {
-                Person p = it.next();
-                if (p.firstName().equals(person.firstName()) && p.lastName().equals(person.lastName())) {
-                    it.set(person);
-                    _dbHandle.set(_dbKey, _persons);
-                    return;
-                }
+            int id = _findPersonID(person.firstName(), person.lastName());
+            if (id > 0) {
+                _persons.set(id, person);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -57,8 +71,9 @@ public class PersonRepository {
 
     public void deletePerson(String firstName, String lastName) {
         try {
-            if (_persons.removeIf(e -> e.firstName().equals(firstName) && e.lastName().equals(lastName))) {
-                _dbHandle.set(_dbKey, _persons);
+            int id = _findPersonID(firstName, lastName);
+            if (id > 0) {
+                _persons.remove(id);
             }
         } catch (Exception e) {
             System.err.println(e.getMessage());
