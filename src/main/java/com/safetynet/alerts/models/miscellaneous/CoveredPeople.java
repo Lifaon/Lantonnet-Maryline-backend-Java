@@ -1,4 +1,6 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.models.miscellaneous;
+
+import com.safetynet.alerts.models.PersonInfo;
 
 import java.util.ArrayList;
 import java.util.List;

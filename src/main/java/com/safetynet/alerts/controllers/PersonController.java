@@ -1,21 +1,17 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.controllers;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.safetynet.alerts.models.Person;
+import com.safetynet.alerts.models.PersonName;
+import com.safetynet.alerts.services.PersonService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class PersonController {
 
     @Autowired
     PersonService _personService;
-
-    @GetMapping("/person")
-    public List<Person> getAll() {
-        return _personService.getAll();
-    }
 
     @PostMapping("/person")
     public void createPerson(@RequestBody Person person) {

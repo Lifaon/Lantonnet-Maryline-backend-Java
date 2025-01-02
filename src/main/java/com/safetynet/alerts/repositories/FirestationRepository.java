@@ -1,14 +1,14 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.repositories;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.safetynet.alerts.DBHandle;
+import com.safetynet.alerts.models.Firestation;
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 @Repository
 public class FirestationRepository {
@@ -27,7 +27,7 @@ public class FirestationRepository {
     }
 
     public List<Firestation> getAll() {
-        return _firestations;
+        return Collections.unmodifiableList(_firestations);
     };
 
     public void createFirestation(Firestation firestation) {

@@ -1,4 +1,8 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.controllers;
+
+import com.safetynet.alerts.models.MedicalRecord;
+import com.safetynet.alerts.models.PersonName;
+import com.safetynet.alerts.services.MedicalRecordService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

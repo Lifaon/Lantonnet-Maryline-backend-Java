@@ -1,14 +1,15 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.repositories;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.safetynet.alerts.DBHandle;
+import com.safetynet.alerts.models.MedicalRecord;
+import com.safetynet.alerts.models.PersonName;
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 @Repository
 public class MedicalRecordRepository {
@@ -27,7 +28,7 @@ public class MedicalRecordRepository {
     }
 
     public List<MedicalRecord> getAll() {
-        return _medicalRecords;
+        return Collections.unmodifiableList(_medicalRecords);
     };
 
     private int _findMedicalRecordID(PersonName name) {
@@ -41,7 +42,7 @@ public class MedicalRecordRepository {
 
     public MedicalRecord getMedicalRecord(PersonName name) {
         int id = _findMedicalRecordID(name);
-        if (id > 0) {
+        if (id >= 0) {
             return _medicalRecords.get(id);
         }
         return null;
@@ -59,7 +60,7 @@ public class MedicalRecordRepository {
     public void editMedicalRecord(MedicalRecord medicalRecord) {
         try {
             int id = _findMedicalRecordID(medicalRecord);
-            if (id > 0) {
+            if (id >= 0) {
                 _medicalRecords.set(id, medicalRecord);
                 _dbHandle.set(_dbKey, _medicalRecords);
             }
@@ -71,7 +72,7 @@ public class MedicalRecordRepository {
     public void deleteMedicalRecord(PersonName name) {
         try {
             int id = _findMedicalRecordID(name);
-            if (id > 0) {
+            if (id >= 0) {
                 _medicalRecords.remove(id);
                 _dbHandle.set(_dbKey, _medicalRecords);
             }

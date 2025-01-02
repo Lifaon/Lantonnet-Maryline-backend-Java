@@ -1,9 +1,11 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.controllers;
+
+import com.safetynet.alerts.models.miscellaneous.CoveredPeople;
+import com.safetynet.alerts.models.Firestation;
+import com.safetynet.alerts.services.FirestationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class FirestationController {

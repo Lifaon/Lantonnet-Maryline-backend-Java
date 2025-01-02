@@ -1,9 +1,13 @@
-package com.safetynet.alerts;
+package com.safetynet.alerts.repositories;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import com.safetynet.alerts.DBHandle;
+import com.safetynet.alerts.models.Person;
+import com.safetynet.alerts.models.PersonName;
+
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import java.util.*;
 
@@ -23,8 +27,8 @@ public class PersonRepository {
         }
     }
 
-    public List<Person> getAll() {
-        return _persons;
+    public final List<Person> getAll() {
+        return Collections.unmodifiableList(_persons);
     };
 
     private int _findPersonID(PersonName name) {
@@ -38,8 +42,8 @@ public class PersonRepository {
 
     public Person getPerson(PersonName name) {
         int id =  _findPersonID(name);
-        if (id > 0) {
-            return _persons.get(id);
+        if (id >= 0) {
+            return  _persons.get(id);
         }
         return null;
     };
@@ -56,7 +60,7 @@ public class PersonRepository {
     public void editPerson(Person person) {
         try {
             int id = _findPersonID(person);
-            if (id > 0) {
+            if (id >= 0) {
                 _persons.set(id, person);
                 _dbHandle.set(_dbKey, _persons);
             }
@@ -71,7 +75,7 @@ public class PersonRepository {
     public void deletePerson(PersonName name) {
         try {
             int id = _findPersonID(name);
-            if (id > 0) {
+            if (id >= 0) {
                 _persons.remove(id);
                 _dbHandle.set(_dbKey, _persons);
             }
