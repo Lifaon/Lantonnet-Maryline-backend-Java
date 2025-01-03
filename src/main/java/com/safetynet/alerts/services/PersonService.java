@@ -7,8 +7,8 @@ import com.safetynet.alerts.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
@@ -16,13 +16,9 @@ public class PersonService {
     private PersonRepository _personRepository;
 
     public List<Person> getPeopleByAddress(String address) {
-        final List<Person> people = new ArrayList<>();
-        for (Person person : _personRepository.getAll()) {
-            if (person.address.equals(address)) {
-                people.add(person);
-            }
-        }
-        return people;
+        return _personRepository.getAll().stream().filter(
+                person -> person.address.equals(address)
+            ).collect(Collectors.toList());
     }
 
     public void createPerson(Person p) {

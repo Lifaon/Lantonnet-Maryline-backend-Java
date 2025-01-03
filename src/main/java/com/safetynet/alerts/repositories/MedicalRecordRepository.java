@@ -4,12 +4,15 @@ import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.models.MedicalRecord;
 import com.safetynet.alerts.models.PersonName;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Repository
 public class MedicalRecordRepository {
@@ -32,12 +35,10 @@ public class MedicalRecordRepository {
     };
 
     private int _findMedicalRecordID(PersonName name) {
-        for (final MedicalRecord r : _medicalRecords) {
-            if (r.firstName.equals(name.firstName) && r.lastName.equals(name.lastName)) {
-                return _medicalRecords.indexOf(r);
-            }
-        }
-        return -1;
+        return _medicalRecords.stream().filter(r ->
+                r.firstName.equals(name.firstName) &&
+                r.lastName.equals(name.lastName)
+        ).findAny().map(_medicalRecords::indexOf).orElse(-1);
     };
 
     public MedicalRecord getMedicalRecord(PersonName name) {

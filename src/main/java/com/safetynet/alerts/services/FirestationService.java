@@ -22,11 +22,11 @@ public class FirestationService {
 
     public List<PersonInfo> getStationPersonInfo(String station) {
         final List<PersonInfo> people = new ArrayList<>();
-        for (final var firestation : _firestationRepository.getAll()) {
+        _firestationRepository.getAll().forEach(firestation ->  {
             if (firestation.station().equals(station)) {
                 people.addAll(_personService.getPeopleByAddress(firestation.address()));
             }
-        }
+        });
         return people;
     }
 
@@ -35,14 +35,13 @@ public class FirestationService {
         final CoveredPeople coveredPeople = new CoveredPeople();
         coveredPeople.people = getStationPersonInfo(station);
 
-        for (final var person : coveredPeople.people) {
+        coveredPeople.people.forEach(person -> {
             if (_medicalRecordService.isAdult(person)) {
                 coveredPeople.adults++;
-            }
-            else {
+            } else {
                 coveredPeople.children++;
             }
-        }
+        });
 
         return coveredPeople;
     };

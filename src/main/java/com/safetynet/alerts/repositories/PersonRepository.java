@@ -4,12 +4,15 @@ import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.models.Person;
 import com.safetynet.alerts.models.PersonName;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @Repository
 public class PersonRepository {
@@ -32,12 +35,10 @@ public class PersonRepository {
     };
 
     private int _findPersonID(PersonName name) {
-        for (final Person p : _persons) {
-            if (p.firstName.equals(name.firstName) && p.lastName.equals(name.lastName)) {
-                return _persons.indexOf(p);
-            }
-        }
-        return -1;
+        return _persons.stream().filter(p ->
+            p.firstName.equals(name.firstName) &&
+            p.lastName.equals(name.lastName)
+        ).findAny().map(_persons::indexOf).orElse(-1);
     }
 
     public Person getPerson(PersonName name) {

@@ -3,12 +3,16 @@ package com.safetynet.alerts.repositories;
 import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.models.Firestation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.ListIterator;
 
 @Repository
 public class FirestationRepository {
@@ -86,3 +90,4 @@ public class FirestationRepository {
         }
     };
 }
+
