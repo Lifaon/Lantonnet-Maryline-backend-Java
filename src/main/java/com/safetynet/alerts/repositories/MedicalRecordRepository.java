@@ -1,10 +1,9 @@
 package com.safetynet.alerts.repositories;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.models.MedicalRecord;
 import com.safetynet.alerts.models.PersonName;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -25,61 +24,35 @@ public class MedicalRecordRepository {
 
     @PostConstruct
     private void init() throws JsonProcessingException {
-        final MedicalRecord[] values = _dbHandle.get(_dbKey, MedicalRecord[].class);
-        if (values != null) {
-            _medicalRecords.addAll(Arrays.asList(values));
-        }
+        _dbHandle.get(_dbKey, MedicalRecord[].class).ifPresent(values ->
+            _medicalRecords.addAll(Arrays.asList(values))
+        );
     }
 
     public List<MedicalRecord> getAll() {
         return Collections.unmodifiableList(_medicalRecords);
     };
 
-    private int _findMedicalRecordID(PersonName name) {
-        return _medicalRecords.stream().filter(r ->
-                r.firstName.equals(name.firstName) &&
-                r.lastName.equals(name.lastName)
-        ).findAny().map(_medicalRecords::indexOf).orElse(-1);
+    public Optional<MedicalRecord> getMedicalRecord(PersonName name) {
+        return _medicalRecords.stream().filter(r -> r.sameName(name)).findAny();
     };
 
-    public Optional<MedicalRecord> getMedicalRecord(PersonName name) {
-        int id = _findMedicalRecordID(name);
-        if (id >= 0) {
-            return Optional.ofNullable(_medicalRecords.get(id));
-        }
-        return Optional.empty();
-    }
-
     public void createMedicalRecord(MedicalRecord medicalRecord) {
-        try {
-            _medicalRecords.add(medicalRecord);
-            _dbHandle.set(_dbKey, _medicalRecords);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        _medicalRecords.add(medicalRecord);
+        _dbHandle.set(_dbKey, _medicalRecords);
     };
 
     public void editMedicalRecord(MedicalRecord medicalRecord) {
-        try {
-            int id = _findMedicalRecordID(medicalRecord);
-            if (id >= 0) {
-                _medicalRecords.set(id, medicalRecord);
-                _dbHandle.set(_dbKey, _medicalRecords);
-            }
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        getMedicalRecord(medicalRecord).ifPresent(r -> {
+            _medicalRecords.set(_medicalRecords.indexOf(r), medicalRecord);
+            _dbHandle.set(_dbKey, _medicalRecords);
+        });
     };
 
     public void deleteMedicalRecord(PersonName name) {
-        try {
-            int id = _findMedicalRecordID(name);
-            if (id >= 0) {
-                _medicalRecords.remove(id);
-                _dbHandle.set(_dbKey, _medicalRecords);
-            }
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        getMedicalRecord(name).ifPresent(r -> {
+            _medicalRecords.remove(r);
+            _dbHandle.set(_dbKey, _medicalRecords);
+        });
     };
 }

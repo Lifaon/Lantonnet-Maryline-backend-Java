@@ -10,6 +10,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Scanner;
 
 @Configuration()
@@ -38,11 +39,11 @@ public class DBHandle {
         }
     }
 
-    public <T> T get(String key, Class<T> type) throws JsonProcessingException {
-        return _mapper.treeToValue(_nodes.get(key), type);
+    public <T> Optional<T> get(String key, Class<T> type) throws JsonProcessingException {
+        return Optional.ofNullable(_mapper.treeToValue(_nodes.get(key), type));
     }
 
-    public <T> void set(String key, T value) throws IOException {
+    public <T> void set(String key, T value) {
 
         if (_nodes.has(key)) {
             _nodes.set(key, _mapper.convertValue(value, JsonNode.class));
@@ -51,11 +52,15 @@ public class DBHandle {
             return;
         }
 
-        FileWriter file = new FileWriter(_json_path);
-        BufferedWriter writer = new BufferedWriter(file);
-        writer.write(_nodes.toPrettyString());
-        writer.close();
-        file.close();
+        try {
+            FileWriter file = new FileWriter(_json_path);
+            BufferedWriter writer = new BufferedWriter(file);
+            writer.write(_nodes.toPrettyString());
+            writer.close();
+            file.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

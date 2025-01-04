@@ -16,4 +16,8 @@ public class PersonName {
     public <Child extends PersonName> PersonName(Child child) {
         Utils.copyFields(PersonName.class, child, this);
     }
+
+    final public <T extends PersonName> boolean sameName(PersonName personName) {
+        return firstName.equals(personName.firstName) && lastName.equals(personName.lastName);
+    }
 }

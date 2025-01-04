@@ -2,13 +2,11 @@ package com.safetynet.alerts.services;
 
 import com.safetynet.alerts.Utils;
 import com.safetynet.alerts.models.MedicalInfo;
-import com.safetynet.alerts.models.Person;
 import com.safetynet.alerts.models.PersonName;
 import com.safetynet.alerts.models.miscellaneous.ChildAlert;
 import com.safetynet.alerts.models.miscellaneous.ChildInfo;
 import com.safetynet.alerts.models.miscellaneous.PersonEmergencyInfo;
 import com.safetynet.alerts.models.miscellaneous.PersonMedicalInfo;
-
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,11 +93,12 @@ public class MiscellaneousService {
             personMedicalInfo.age = record.getAge();
             ret.add(personMedicalInfo);
         });
-        ret.forEach(personMedicalInfo -> {
-            final Person person = _personService.getPerson(personMedicalInfo);
-            personMedicalInfo.address = person.address;
-            personMedicalInfo.email = person.email;
-        });
+        ret.forEach(personMedicalInfo ->
+            _personService.getPerson(personMedicalInfo).ifPresent(person -> {
+                personMedicalInfo.address = person.address;
+                personMedicalInfo.email = person.email;
+            })
+        );
         return ret;
     }
 

@@ -14,10 +14,6 @@ public class MedicalRecordService {
     @Autowired
     private MedicalRecordRepository _medicalRecordRepository;
 
-    public List<MedicalRecord> getAll() {
-        return _medicalRecordRepository.getAll();
-    };
-
     public List<MedicalRecord> getMedicalRecordsFromLastName(String lastName) {
         return _medicalRecordRepository.getAll().stream().filter(
             medicalRecord -> medicalRecord.lastName.equals(lastName)

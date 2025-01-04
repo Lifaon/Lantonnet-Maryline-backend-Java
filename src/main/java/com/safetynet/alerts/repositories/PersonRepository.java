@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PersonRepository {
@@ -19,68 +20,43 @@ public class PersonRepository {
     @Autowired
     private DBHandle _dbHandle;
     private final String _dbKey = "persons";
-    private final List<Person> _persons = new ArrayList<>();
+    private final List<Person> _people = new ArrayList<>();
 
     @PostConstruct
     private void init() throws JsonProcessingException {
-        final Person[] values = _dbHandle.get(_dbKey, Person[].class);
-        if (values != null) {
-            _persons.addAll(Arrays.asList(values));
-        }
+        _dbHandle.get(_dbKey, Person[].class).ifPresent(values ->
+            _people.addAll(Arrays.asList(values))
+        );
     }
 
     public final List<Person> getAll() {
-        return Collections.unmodifiableList(_persons);
+        return Collections.unmodifiableList(_people);
     };
 
-    private int _findPersonID(PersonName name) {
-        return _persons.stream().filter(p ->
-            p.firstName.equals(name.firstName) &&
-            p.lastName.equals(name.lastName)
-        ).findAny().map(_persons::indexOf).orElse(-1);
+    public Optional<Person> getPerson(PersonName name) {
+        return _people.stream().filter(p -> p.sameName(name)).findAny();
     }
 
-    public Person getPerson(PersonName name) {
-        int id =  _findPersonID(name);
-        if (id >= 0) {
-            return  _persons.get(id);
-        }
-        return null;
-    };
-
     public void createPerson(Person person) {
-        try {
-            _persons.add(person);
-            _dbHandle.set(_dbKey, _persons);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        _people.add(person);
+        _dbHandle.set(_dbKey, _people);
     };
 
     public void editPerson(Person person) {
-        try {
-            int id = _findPersonID(person);
-            if (id >= 0) {
-                _persons.set(id, person);
-                _dbHandle.set(_dbKey, _persons);
-            }
-            else {
-                System.err.println("No such person");
-            }
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        getPerson(person).ifPresentOrElse(prev -> {
+            _people.set(_people.indexOf(prev), person);
+            _dbHandle.set(_dbKey, _people);
+        }, () ->
+            System.err.println("No such person")
+        );
     };
 
     public void deletePerson(PersonName name) {
-        try {
-            int id = _findPersonID(name);
-            if (id >= 0) {
-                _persons.remove(id);
-                _dbHandle.set(_dbKey, _persons);
-            }
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        getPerson(name).ifPresentOrElse(person -> {
+            _people.remove(person);
+            _dbHandle.set(_dbKey, _people);
+        }, () ->
+            System.err.println("No such person")
+        );
     };
 }
