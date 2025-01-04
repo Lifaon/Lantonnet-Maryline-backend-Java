@@ -47,7 +47,7 @@ public class FirestationRepository {
         ListIterator<Firestation> iterator = _firestations.listIterator();
         while (iterator.hasNext()) {
             Firestation next = iterator.next();
-            if (next.address().equals(address)) {
+            if (next.address.equals(address)) {
                 return iterator;
             }
         }
@@ -59,7 +59,7 @@ public class FirestationRepository {
             ListIterator<Firestation> it = _firestations.listIterator();
             while (it.hasNext()) {
                 Firestation next = it.next();
-                if (next.address().equals(firestation.address())) {
+                if (next.address.equals(firestation.address)) {
                     it.set(firestation);
                     _dbHandle.set(_dbKey, _firestations);
                     return;
@@ -72,7 +72,7 @@ public class FirestationRepository {
 
     public void deleteAddress(String address) {
         try {
-            if (_firestations.removeIf(e -> e.address().equals(address))) {
+            if (_firestations.removeIf(e -> e.address.equals(address))) {
                 _dbHandle.set(_dbKey, _firestations);
             }
         } catch (Exception e) {
@@ -82,7 +82,7 @@ public class FirestationRepository {
 
     public void deleteStation(String station) {
         try {
-            if (_firestations.removeIf(e -> e.station().equals(station))) {
+            if (_firestations.removeIf(e -> e.station.equals(station))) {
                 _dbHandle.set(_dbKey, _firestations);
             }
         } catch (Exception e) {

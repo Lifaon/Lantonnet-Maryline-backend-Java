@@ -4,7 +4,6 @@ import com.safetynet.alerts.models.Firestation;
 import com.safetynet.alerts.models.PersonInfo;
 import com.safetynet.alerts.models.miscellaneous.CoveredPeople;
 import com.safetynet.alerts.repositories.FirestationRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +19,25 @@ public class FirestationService {
     @Autowired
     private MedicalRecordService _medicalRecordService;
 
-    public List<PersonInfo> getStationPersonInfo(String station) {
+    public List<String> getAddresses(List<String> stations) {
+        return _firestationRepository.getAll().stream().filter(
+            firestation -> stations.contains(firestation.station)
+        ).map(firestation -> firestation.address).toList();
+    }
+
+    public String getStation(String address) {
+        return _firestationRepository.getAll().stream().filter(
+            f -> f.address.equals(address)
+        ).map(firestation -> firestation.station).findFirst().orElse(null);
+    }
+
+    public List<PersonInfo> getPeopleInfo(String station) {
         final List<PersonInfo> people = new ArrayList<>();
         _firestationRepository.getAll().forEach(firestation ->  {
-            if (firestation.station().equals(station)) {
-                people.addAll(_personService.getPeopleByAddress(firestation.address()));
+            if (firestation.station.equals(station)) {
+                _personService.getPeopleByAddress(firestation.address).forEach(person ->
+                    people.add(new PersonInfo(person))
+                );
             }
         });
         return people;
@@ -33,7 +46,7 @@ public class FirestationService {
     public CoveredPeople getCoveredPeople(String station) {
 
         final CoveredPeople coveredPeople = new CoveredPeople();
-        coveredPeople.people = getStationPersonInfo(station);
+        coveredPeople.people = getPeopleInfo(station);
 
         coveredPeople.people.forEach(person -> {
             if (_medicalRecordService.isAdult(person)) {

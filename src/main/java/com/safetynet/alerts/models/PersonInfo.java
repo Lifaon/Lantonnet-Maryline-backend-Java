@@ -7,18 +7,7 @@ public class PersonInfo extends PersonName {
     public String phone;
 
     public PersonInfo() {};
-
-    private PersonInfo(String address, String phone) {
-        this.address = address;
-        this.phone = phone;
+    public <Child extends PersonInfo> PersonInfo (Child child) {
+        Utils.copyFields(PersonInfo.class, child, this);
     }
-
-    public PersonInfo(PersonName name, String address, String phone) {
-        this(address, phone);
-        Utils.copyFields(PersonName.class, name, this);
-    }
-
-    public PersonInfo(String firstName, String lastName, String address, String phone) {
-        this(new PersonName(lastName, firstName), address, phone);
-    };
 }

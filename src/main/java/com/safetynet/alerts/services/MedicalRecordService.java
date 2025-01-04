@@ -3,13 +3,11 @@ package com.safetynet.alerts.services;
 import com.safetynet.alerts.models.MedicalRecord;
 import com.safetynet.alerts.models.PersonName;
 import com.safetynet.alerts.repositories.MedicalRecordRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MedicalRecordService {
@@ -20,12 +18,18 @@ public class MedicalRecordService {
         return _medicalRecordRepository.getAll();
     };
 
+    public List<MedicalRecord> getMedicalRecordsFromLastName(String lastName) {
+        return _medicalRecordRepository.getAll().stream().filter(
+            medicalRecord -> medicalRecord.lastName.equals(lastName)
+        ).toList();
+    };
+
+    public Optional<MedicalRecord> getMedicalRecord(PersonName personName) {
+        return _medicalRecordRepository.getMedicalRecord(personName);
+    }
+
     public int getPersonAge(PersonName personName) {
-
-        final MedicalRecord medicalRecord = _medicalRecordRepository.getMedicalRecord(personName);
-        final LocalDate birth = LocalDate.parse(medicalRecord.birthdate, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
-
-        return (int)java.time.temporal.ChronoUnit.YEARS.between(birth, LocalDate.now());
+        return getMedicalRecord(personName).map(MedicalRecord::getAge).orElse(0);
     }
 
     public boolean isAdult(PersonName personName) {

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class MedicalRecordRepository {
@@ -41,12 +42,12 @@ public class MedicalRecordRepository {
         ).findAny().map(_medicalRecords::indexOf).orElse(-1);
     };
 
-    public MedicalRecord getMedicalRecord(PersonName name) {
+    public Optional<MedicalRecord> getMedicalRecord(PersonName name) {
         int id = _findMedicalRecordID(name);
         if (id >= 0) {
-            return _medicalRecords.get(id);
+            return Optional.ofNullable(_medicalRecords.get(id));
         }
-        return null;
+        return Optional.empty();
     }
 
     public void createMedicalRecord(MedicalRecord medicalRecord) {

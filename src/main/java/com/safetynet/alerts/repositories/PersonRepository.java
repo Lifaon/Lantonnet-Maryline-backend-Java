@@ -1,10 +1,9 @@
 package com.safetynet.alerts.repositories;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.models.Person;
 import com.safetynet.alerts.models.PersonName;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;

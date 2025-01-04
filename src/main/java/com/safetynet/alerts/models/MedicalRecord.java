@@ -1,18 +1,19 @@
 package com.safetynet.alerts.models;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
-public class MedicalRecord extends PersonName {
+public class MedicalRecord extends MedicalInfo {
     public String birthdate;
-    public List<String> medications;
-    public List<String> allergies;
 
-    public MedicalRecord() {}
+    public int getAge() {
+        return (int)java.time.temporal.ChronoUnit.YEARS.between(
+            LocalDate.parse(birthdate, DateTimeFormatter.ofPattern("MM/dd/yyyy")),
+            LocalDate.now()
+        );
+    }
 
-    public MedicalRecord(String firstName, String lastName, String birthdate, List<String> medications, List<String> allergies) {
-        super(firstName, lastName);
-        this.birthdate = birthdate;
-        this.medications = medications;
-        this.allergies = allergies;
+    public boolean isAdult() {
+        return getAge() > 18;
     }
 };
