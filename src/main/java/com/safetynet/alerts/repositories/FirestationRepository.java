@@ -1,62 +1,37 @@
 package com.safetynet.alerts.repositories;
 
-import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.Utils;
 import com.safetynet.alerts.models.Firestation;
-import jakarta.annotation.PostConstruct;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 @Repository
-public class FirestationRepository {
+public class FirestationRepository extends BaseRepository<Firestation> {
 
-    @Autowired
-    private DBHandle _dbHandle;
-    private final String _dbKey = "firestations";
-    private final List<Firestation> _firestations = new ArrayList<>();
-
-    final private Logger LOGGER = LogManager.getLogger();
-
-    @PostConstruct
-    private void init() {
-        _dbHandle.get(_dbKey, Firestation[].class).ifPresent(values -> {
-            _firestations.addAll(Arrays.asList(values));
-            LOGGER.debug("Imported {} firestations", _firestations.size());
-        });
+    FirestationRepository() {
+        super("firestations", Firestation[].class);
     }
 
-    public List<Firestation> getAll() {
-        return Collections.unmodifiableList(_firestations);
-    };
-
     public void createFirestation(Firestation firestation) {
-        _firestations.add(firestation);
-        _dbHandle.set(_dbKey, _firestations);
+        _models.add(firestation);
+        _updateDB();
     };
 
     public void editFirestation(Firestation firestation) {
-        _firestations.stream().filter(f -> f.address.equals(firestation.address)).findAny().ifPresent(f -> {
+        _models.stream().filter(f -> f.address.equals(firestation.address)).findAny().ifPresent(f -> {
             Utils.copyFields(Firestation.class, firestation, f);
-            _dbHandle.set(_dbKey, _firestations);
+            _updateDB();
         });
     };
 
     public void deleteAddress(String address) {
-        if (_firestations.removeIf(f -> f.address.equals(address))) {
-            _dbHandle.set(_dbKey, _firestations);
+        if (_models.removeIf(f -> f.address.equals(address))) {
+            _updateDB();
         }
     };
 
     public void deleteStation(String station) {
-        if (_firestations.removeIf(f -> f.station.equals(station))) {
-            _dbHandle.set(_dbKey, _firestations);
+        if (_models.removeIf(f -> f.station.equals(station))) {
+            _updateDB();
         }
     };
 }

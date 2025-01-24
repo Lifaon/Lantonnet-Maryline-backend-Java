@@ -31,8 +31,8 @@ public class GlobalExceptionHandler {
             _response.setStatus(status);
             _response.setContentType("text/plain");
             _response.getWriter().write(
-                    status + ": " + e.getBody().getTitle()
-                            + "\n" + e.getReason()
+                status + ": " + e.getBody().getTitle()
+                + "\n" + e.getReason()
             );
         }
         catch (Exception new_e) {
@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     }
 
     private void _process(Exception e, HttpStatus status) {
-        handleGeneralException(new ResponseStatusException(status, e.getMessage()));
+        _process(new ResponseStatusException(status, e.getMessage()));
     }
 
     @ExceptionHandler(ResponseStatusException.class)
