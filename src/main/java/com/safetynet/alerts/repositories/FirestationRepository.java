@@ -1,10 +1,11 @@
 package com.safetynet.alerts.repositories;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.Utils;
 import com.safetynet.alerts.models.Firestation;
 import jakarta.annotation.PostConstruct;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,11 +22,14 @@ public class FirestationRepository {
     private final String _dbKey = "firestations";
     private final List<Firestation> _firestations = new ArrayList<>();
 
+    final private Logger LOGGER = LogManager.getLogger();
+
     @PostConstruct
-    private void init() throws JsonProcessingException {
-        _dbHandle.get(_dbKey, Firestation[].class).ifPresent(values ->
-            _firestations.addAll(Arrays.asList(values))
-        );
+    private void init() {
+        _dbHandle.get(_dbKey, Firestation[].class).ifPresent(values -> {
+            _firestations.addAll(Arrays.asList(values));
+            LOGGER.debug("Imported {} firestations", _firestations.size());
+        });
     }
 
     public List<Firestation> getAll() {

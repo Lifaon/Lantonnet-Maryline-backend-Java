@@ -1,9 +1,10 @@
 package com.safetynet.alerts;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Configuration;
 
 import java.io.BufferedWriter;
@@ -20,6 +21,8 @@ public class DBHandle {
     final private ObjectMapper _mapper = new ObjectMapper();
     private ObjectNode _nodes;
 
+    final private Logger LOGGER = LogManager.getLogger();
+
     DBHandle() {
         try {
             File f = new File(_json_path);
@@ -33,14 +36,21 @@ public class DBHandle {
             }
             reader.close();
             _nodes = (ObjectNode) _mapper.readTree(json_data.toString());
+            LOGGER.debug("Initialized {} nodes", _nodes.size());
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            LOGGER.error(e);
             System.exit(1);
         }
     }
 
-    public <T> Optional<T> get(String key, Class<T> type) throws JsonProcessingException {
-        return Optional.ofNullable(_mapper.treeToValue(_nodes.get(key), type));
+    public <T> Optional<T> get(String key, Class<T> type) {
+        try {
+            return Optional.ofNullable(_mapper.treeToValue(_nodes.get(key), type));
+        }
+        catch (Exception e) {
+            LOGGER.error(e);
+            return Optional.empty();
+        }
     }
 
     public <T> void set(String key, T value) {
@@ -48,7 +58,7 @@ public class DBHandle {
         if (_nodes.has(key)) {
             _nodes.set(key, _mapper.convertValue(value, JsonNode.class));
         } else {
-            System.err.println("Key " + key + " not found");
+            LOGGER.error("Key '{}' not found in database", key);
             return;
         }
 
@@ -58,6 +68,7 @@ public class DBHandle {
             writer.write(_nodes.toPrettyString());
             writer.close();
             file.close();
+            LOGGER.debug("Edited '{}' in database", key);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -5,6 +5,8 @@ import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.models.MedicalRecord;
 import com.safetynet.alerts.models.PersonName;
 import jakarta.annotation.PostConstruct;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -22,11 +24,14 @@ public class MedicalRecordRepository {
     private final String _dbKey = "medicalrecords";
     private final List<MedicalRecord> _medicalRecords = new ArrayList<>();
 
+    final private Logger LOGGER = LogManager.getLogger();
+
     @PostConstruct
     private void init() throws JsonProcessingException {
-        _dbHandle.get(_dbKey, MedicalRecord[].class).ifPresent(values ->
-            _medicalRecords.addAll(Arrays.asList(values))
-        );
+        _dbHandle.get(_dbKey, MedicalRecord[].class).ifPresent(values -> {
+            _medicalRecords.addAll(Arrays.asList(values));
+            LOGGER.debug("Imported {} medical records", _medicalRecords.size());
+        });
     }
 
     public List<MedicalRecord> getAll() {
@@ -37,20 +42,28 @@ public class MedicalRecordRepository {
         return _medicalRecords.stream().filter(r -> r.sameName(name)).findAny();
     };
 
+    private Optional<MedicalRecord> _getMedicalRecordVerbose(PersonName name) {
+        Optional<MedicalRecord> record = getMedicalRecord(name);
+        if (record.isEmpty()) {
+            LOGGER.warn("No such medical record: {}", name);
+        }
+        return record;
+    };
+
     public void createMedicalRecord(MedicalRecord medicalRecord) {
         _medicalRecords.add(medicalRecord);
         _dbHandle.set(_dbKey, _medicalRecords);
     };
 
     public void editMedicalRecord(MedicalRecord medicalRecord) {
-        getMedicalRecord(medicalRecord).ifPresent(r -> {
+        _getMedicalRecordVerbose(medicalRecord).ifPresent(r -> {
             _medicalRecords.set(_medicalRecords.indexOf(r), medicalRecord);
             _dbHandle.set(_dbKey, _medicalRecords);
         });
     };
 
     public void deleteMedicalRecord(PersonName name) {
-        getMedicalRecord(name).ifPresent(r -> {
+        _getMedicalRecordVerbose(name).ifPresent(r -> {
             _medicalRecords.remove(r);
             _dbHandle.set(_dbKey, _medicalRecords);
         });
