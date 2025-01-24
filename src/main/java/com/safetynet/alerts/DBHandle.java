@@ -11,6 +11,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -27,7 +28,9 @@ public class DBHandle {
         try {
             File f = new File(_json_path);
             if (!f.isFile()) {
-                f = new File("./resources/og_data.json");
+                File og = new File("./resources/og_data.json");
+                Files.copy(og.toPath(), f.toPath());
+                LOGGER.debug("Copied '{}' to '{}'", og, f);
             }
             StringBuilder json_data = new StringBuilder();
             Scanner reader = new Scanner(f);
