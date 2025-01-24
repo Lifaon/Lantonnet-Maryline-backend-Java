@@ -21,26 +21,18 @@ public class MedicalRecordService {
     };
 
     public Optional<MedicalRecord> getMedicalRecord(PersonName personName) {
-        return _medicalRecordRepository.getMedicalRecord(personName);
-    }
-
-    public int getPersonAge(PersonName personName) {
-        return getMedicalRecord(personName).map(MedicalRecord::getAge).orElse(0);
-    }
-
-    public boolean isAdult(PersonName personName) {
-        return getPersonAge(personName) > 18;
+        return _medicalRecordRepository.get(personName);
     }
 
     public void createMedicalRecord(MedicalRecord p) {
-        _medicalRecordRepository.createMedicalRecord(p);
+        _medicalRecordRepository.create(p);
     };
 
     public void editMedicalRecord(MedicalRecord p) {
-        _medicalRecordRepository.editMedicalRecord(p);
+        _medicalRecordRepository.edit(p);
     };
 
     public void deleteMedicalRecord(PersonName name) {
-        _medicalRecordRepository.deleteMedicalRecord(name);
+        _medicalRecordRepository.delete(name);
     };
 }

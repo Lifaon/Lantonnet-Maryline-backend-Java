@@ -1,37 +1,29 @@
 package com.safetynet.alerts.repositories;
 
-import com.safetynet.alerts.Utils;
 import com.safetynet.alerts.models.Firestation;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @Repository
-public class FirestationRepository extends BaseRepository<Firestation> {
+public class FirestationRepository extends BaseRepository<Firestation, String> {
 
     FirestationRepository() {
         super("firestations", Firestation[].class);
     }
 
-    public void createFirestation(Firestation firestation) {
-        _models.add(firestation);
-        _updateDB();
-    };
+    @Override
+    public Optional<Firestation> get(String address) {
+        return _models.stream().filter(f -> f.address.equals(address)).findAny();
+    }
 
-    public void editFirestation(Firestation firestation) {
-        _models.stream().filter(f -> f.address.equals(firestation.address)).findAny().ifPresent(f -> {
-            Utils.copyFields(Firestation.class, firestation, f);
+    public void deleteStationNumber(String stationNumber) {
+        if (_models.removeIf(f -> f.station.equals(stationNumber))) {
             _updateDB();
-        });
-    };
-
-    public void deleteAddress(String address) {
-        if (_models.removeIf(f -> f.address.equals(address))) {
-            _updateDB();
-        }
-    };
-
-    public void deleteStation(String station) {
-        if (_models.removeIf(f -> f.station.equals(station))) {
-            _updateDB();
+        } else {
+            throw new ResponseStatusException(HttpStatus.NO_CONTENT);
         }
     };
 }

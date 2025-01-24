@@ -48,31 +48,33 @@ public class FirestationService {
         final CoveredPeople coveredPeople = new CoveredPeople();
         coveredPeople.people = getPeopleInfo(station);
 
-        coveredPeople.people.forEach(person -> {
-            if (_medicalRecordService.isAdult(person)) {
-                coveredPeople.adults++;
-            } else {
-                coveredPeople.children++;
-            }
-        });
+        coveredPeople.people.forEach(person ->
+            _medicalRecordService.getMedicalRecord(person).ifPresent(record -> {
+                if (record.isAdult()) {
+                    coveredPeople.adults++;
+                } else {
+                    coveredPeople.children++;
+                }
+            })
+        );
 
         return coveredPeople;
     };
 
     public void createFirestation(Firestation p) {
-        _firestationRepository.createFirestation(p);
+        _firestationRepository.create(p);
     };
 
     public void editFirestation(Firestation p) {
-        _firestationRepository.editFirestation(p);
+        _firestationRepository.edit(p);
     };
 
     public void deleteAddress(String address) {
-        _firestationRepository.deleteAddress(address);
+        _firestationRepository.delete(address);
     };
 
-    public void deleteStation(String station) {
-        _firestationRepository.deleteStation(station);
+    public void deleteStationNumber(String stationNumber) {
+        _firestationRepository.deleteStationNumber(stationNumber);
     };
 
 }

@@ -17,7 +17,7 @@ public class PersonService {
     private PersonRepository _personRepository;
 
     public Optional<Person> getPerson(PersonName personName) {
-        return _personRepository.getPerson(personName);
+        return _personRepository.get(personName);
     }
 
     public List<Person> getPeopleByAddress(String address) {
@@ -35,14 +35,14 @@ public class PersonService {
     }
 
     public void createPerson(Person p) {
-        _personRepository.createPerson(p);
+        _personRepository.create(p);
     };
 
     public void editPerson(Person p) {
-        _personRepository.editPerson(p);
+        _personRepository.edit(p);
     };
 
     public void deletePerson(PersonName name) {
-        _personRepository.deletePerson(name);
+        _personRepository.delete(name);
     };
 }

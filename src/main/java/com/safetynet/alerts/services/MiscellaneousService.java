@@ -30,12 +30,13 @@ public class MiscellaneousService {
         ChildAlert childAlert = new ChildAlert();
 
         _personService.getPeopleByAddress(address).forEach(name -> {
-            int age = _medicalRecordService.getPersonAge(name);
-            if (age <= 18) {
-                childAlert.children.add(new ChildInfo(name, age));
-            } else {
-                childAlert.adults.add(new PersonName(name));
-            }
+            _medicalRecordService.getMedicalRecord(name).ifPresent(record -> {
+                if (record.isAdult()) {
+                    childAlert.children.add(new ChildInfo(name, record.getAge()));
+                } else {
+                    childAlert.adults.add(new PersonName(name));
+                }
+            });
         });
 
         return childAlert;

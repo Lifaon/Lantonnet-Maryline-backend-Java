@@ -20,4 +20,9 @@ public class PersonName {
     final public <T extends PersonName> boolean sameName(PersonName personName) {
         return firstName.equals(personName.firstName) && lastName.equals(personName.lastName);
     }
+
+    @Override
+    public String toString() {
+        return firstName + ' ' + lastName;
+    }
 }

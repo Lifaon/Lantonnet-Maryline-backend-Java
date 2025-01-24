@@ -6,6 +6,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.server.ResponseStatusException;
@@ -61,8 +62,14 @@ public class GlobalExceptionHandler {
         RequestInterceptor.logRequestResponse(_request, _response);
     }
 
+    @ExceptionHandler(MissingRequestValueException.class)
+    public void handleNoResourceFoundException(MissingRequestValueException e) {
+        _process(e, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public void handleOtherException(Exception e) {
+        LOGGER.debug("Unhandled exception type: {}", e.getClass());
         _process(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

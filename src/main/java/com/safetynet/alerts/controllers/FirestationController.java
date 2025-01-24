@@ -4,6 +4,7 @@ import com.safetynet.alerts.models.Firestation;
 import com.safetynet.alerts.models.miscellaneous.CoveredPeople;
 import com.safetynet.alerts.services.FirestationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 public class FirestationController {
@@ -19,7 +21,7 @@ public class FirestationController {
     FirestationService _firestationService;
 
     @GetMapping("/firestation")
-    public CoveredPeople getCoveredPeople(@RequestParam(value = "stationNumber") String stationNumber) {
+    public CoveredPeople getCoveredPeople(@RequestParam String stationNumber) {
         return _firestationService.getCoveredPeople(stationNumber);
     }
 
@@ -34,17 +36,19 @@ public class FirestationController {
     }
 
     @DeleteMapping("/firestation")
-    public void deleteFirestation(@RequestParam(required = false, value = "address") String address,
-                                  @RequestParam(required = false, value = "station") String station) {
-        if (address == null && station == null) {
-            System.err.println("At least one of 'address' or 'station' parameters should be set.");
-            return;
+    public void deleteFirestation(@RequestParam(required = false) String address,
+                                  @RequestParam(required = false) String stationNumber) {
+        if (address == null && stationNumber == null) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "At least one parameter of 'address' or 'stationNumber' should be set."
+            );
         }
 
         if (address != null) {
             _firestationService.deleteAddress(address);
         } else {
-            _firestationService.deleteStation(station);
+            _firestationService.deleteStationNumber(stationNumber);
         }
     }
 }

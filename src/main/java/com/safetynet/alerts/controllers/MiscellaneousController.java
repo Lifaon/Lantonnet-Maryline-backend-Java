@@ -20,32 +20,32 @@ public class MiscellaneousController {
     MiscellaneousService _miscellaneousService;
 
     @GetMapping("/childAlert")
-    public ChildAlert getChildAlert(@RequestParam(value = "address") String address) {
+    public ChildAlert getChildAlert(@RequestParam String address) {
         return _miscellaneousService.getChildAlert(address);
     }
 
     @GetMapping("/phoneAlert")
-    public List<String> getPhoneAlert(@RequestParam(value = "firestation") String firestation) {
+    public List<String> getPhoneAlert(@RequestParam String firestation) {
         return _miscellaneousService.getPhoneAlert(firestation);
     }
 
     @GetMapping("/fire")
-    public Pair<String, List<PersonEmergencyInfo>> getFireInfo(@RequestParam(value = "address") String address) {
+    public Pair<String, List<PersonEmergencyInfo>> getFireInfo(@RequestParam String address) {
         return _miscellaneousService.getFireInfo(address);
     }
 
     @GetMapping("/flood/stations")
-    public Map<String, List<PersonEmergencyInfo>> getFloodStations(@RequestParam(value = "stations") List<String> stations) {
+    public Map<String, List<PersonEmergencyInfo>> getFloodStations(@RequestParam List<String> stations) {
         return _miscellaneousService.getFloodStations(stations);
     }
 
     @GetMapping("/personInfolastName")
-    public List<PersonMedicalInfo> getPeopleMedicalInfos(@RequestParam(value = "lastName") String lastname) {
+    public List<PersonMedicalInfo> getPeopleMedicalInfos(@RequestParam String lastname) {
         return _miscellaneousService.getPeopleMedicalInfos(lastname);
     }
 
     @GetMapping("/communityEmail")
-    public Set<String> getCommunityEmail(@RequestParam(value = "city") String city) {
+    public Set<String> getCommunityEmail(@RequestParam String city) {
         return _miscellaneousService.getCommunityEmail(city);
     }
 }
