@@ -1,4 +1,4 @@
-package com.safetynet.alerts.models;
+package com.safetynet.alerts.models.miscellaneous;
 
 import com.safetynet.alerts.Utils;
 

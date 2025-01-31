@@ -1,7 +1,7 @@
 package com.safetynet.alerts.services;
 
 import com.safetynet.alerts.models.Person;
-import com.safetynet.alerts.models.PersonName;
+import com.safetynet.alerts.models.miscellaneous.PersonName;
 import com.safetynet.alerts.repositories.PersonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

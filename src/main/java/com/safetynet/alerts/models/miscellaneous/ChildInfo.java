@@ -1,6 +1,5 @@
 package com.safetynet.alerts.models.miscellaneous;
 
-import com.safetynet.alerts.models.PersonName;
 import com.safetynet.alerts.Utils;
 
 public class ChildInfo extends PersonName {

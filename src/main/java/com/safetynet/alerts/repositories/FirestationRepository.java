@@ -19,7 +19,8 @@ public class FirestationRepository extends BaseRepository<Firestation, String> {
         return _models.stream().filter(f -> f.address.equals(address)).findAny();
     }
 
-    public void deleteStationNumber(String stationNumber) {
+    public void deleteByNumber(String stationNumber) {
+        LOGGER.debug("Call 'deleteByNumber()'");
         if (_models.removeIf(f -> f.station.equals(stationNumber))) {
             _updateDB();
         } else {

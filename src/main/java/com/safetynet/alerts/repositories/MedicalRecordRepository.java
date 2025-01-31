@@ -1,7 +1,7 @@
 package com.safetynet.alerts.repositories;
 
 import com.safetynet.alerts.models.MedicalRecord;
-import com.safetynet.alerts.models.PersonName;
+import com.safetynet.alerts.models.miscellaneous.PersonName;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

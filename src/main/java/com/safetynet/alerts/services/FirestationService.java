@@ -1,7 +1,7 @@
 package com.safetynet.alerts.services;
 
 import com.safetynet.alerts.models.Firestation;
-import com.safetynet.alerts.models.PersonInfo;
+import com.safetynet.alerts.models.miscellaneous.PersonInfo;
 import com.safetynet.alerts.models.miscellaneous.CoveredPeople;
 import com.safetynet.alerts.repositories.FirestationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,12 +69,12 @@ public class FirestationService {
         _firestationRepository.edit(p);
     };
 
-    public void deleteAddress(String address) {
+    public void deleteFirestation(String address) {
         _firestationRepository.delete(address);
     };
 
-    public void deleteStationNumber(String stationNumber) {
-        _firestationRepository.deleteStationNumber(stationNumber);
+    public void deleteFirestationsByNumber(String stationNumber) {
+        _firestationRepository.deleteByNumber(stationNumber);
     };
 
 }

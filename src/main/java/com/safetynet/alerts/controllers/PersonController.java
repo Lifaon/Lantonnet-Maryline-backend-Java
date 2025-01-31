@@ -1,7 +1,7 @@
 package com.safetynet.alerts.controllers;
 
 import com.safetynet.alerts.models.Person;
-import com.safetynet.alerts.models.PersonName;
+import com.safetynet.alerts.models.miscellaneous.PersonName;
 import com.safetynet.alerts.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

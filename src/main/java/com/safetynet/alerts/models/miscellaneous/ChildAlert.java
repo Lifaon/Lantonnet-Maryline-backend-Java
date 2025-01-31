@@ -1,7 +1,5 @@
 package com.safetynet.alerts.models.miscellaneous;
 
-import com.safetynet.alerts.models.PersonName;
-
 import java.util.ArrayList;
 import java.util.List;
 

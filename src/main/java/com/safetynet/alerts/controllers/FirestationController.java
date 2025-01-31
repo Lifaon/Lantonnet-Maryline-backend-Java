@@ -46,9 +46,9 @@ public class FirestationController {
         }
 
         if (address != null) {
-            _firestationService.deleteAddress(address);
+            _firestationService.deleteFirestation(address);
         } else {
-            _firestationService.deleteStationNumber(stationNumber);
+            _firestationService.deleteFirestationsByNumber(stationNumber);
         }
     }
 }

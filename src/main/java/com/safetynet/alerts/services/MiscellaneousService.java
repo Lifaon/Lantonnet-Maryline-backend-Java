@@ -1,8 +1,8 @@
 package com.safetynet.alerts.services;
 
 import com.safetynet.alerts.Utils;
-import com.safetynet.alerts.models.MedicalInfo;
-import com.safetynet.alerts.models.PersonName;
+import com.safetynet.alerts.models.miscellaneous.MedicalInfo;
+import com.safetynet.alerts.models.miscellaneous.PersonName;
 import com.safetynet.alerts.models.miscellaneous.ChildAlert;
 import com.safetynet.alerts.models.miscellaneous.ChildInfo;
 import com.safetynet.alerts.models.miscellaneous.PersonEmergencyInfo;

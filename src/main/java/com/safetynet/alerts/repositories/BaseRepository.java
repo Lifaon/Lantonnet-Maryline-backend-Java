@@ -48,7 +48,7 @@ public abstract class BaseRepository <Model extends Identifier<IdentifierType>, 
     public abstract Optional<Model> get(IdentifierType param);
 
     public void create(Model model) {
-        LOGGER.debug("Start 'create()'");
+        LOGGER.debug("Call 'create()'");
         if (get(model.getIdentifier()).isPresent()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Item already exists");
         }
@@ -57,7 +57,7 @@ public abstract class BaseRepository <Model extends Identifier<IdentifierType>, 
     };
 
     public void edit(Model model) {
-        LOGGER.debug("Start 'edit()'");
+        LOGGER.debug("Call 'edit()'");
         get(model.getIdentifier()).ifPresentOrElse(prev -> {
             _models.set(_models.indexOf(prev), model);
             _updateDB();
@@ -67,7 +67,7 @@ public abstract class BaseRepository <Model extends Identifier<IdentifierType>, 
     };
 
     public void delete(IdentifierType param) {
-        LOGGER.debug("Start 'delete()'");
+        LOGGER.debug("Call 'delete()'");
         get(param).ifPresentOrElse(model -> {
             _models.remove(model);
             _updateDB();

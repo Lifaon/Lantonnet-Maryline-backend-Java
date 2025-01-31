@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
     public void handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
         _process(e, HttpStatus.METHOD_NOT_ALLOWED);
         // These requests aren't processed by the request interceptor, force log
-        RequestInterceptor.logRequestResponse(_request, _response);
+        RequestInterceptor.logRequestResponse(LOGGER, _request, _response);
     }
 
     @ExceptionHandler(MissingRequestValueException.class)

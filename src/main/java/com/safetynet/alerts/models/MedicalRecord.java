@@ -1,6 +1,8 @@
 package com.safetynet.alerts.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.safetynet.alerts.models.miscellaneous.MedicalInfo;
+import com.safetynet.alerts.models.miscellaneous.PersonName;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

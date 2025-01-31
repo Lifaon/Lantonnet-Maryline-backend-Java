@@ -1,4 +1,4 @@
-package com.safetynet.alerts.models;
+package com.safetynet.alerts.models.miscellaneous;
 
 import java.util.List;
 

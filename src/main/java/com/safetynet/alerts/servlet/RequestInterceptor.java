@@ -12,51 +12,56 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class RequestInterceptor implements HandlerInterceptor {
 
-    private static final Logger LOGGER = LogManager.getLogger();
+    static public void logRequestResponse(Logger logger, HttpServletRequest request, HttpServletResponse response) {
 
-//    @Override
-//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) {
-//        System.out.println("preHandle");
-//        return true;
-//    }
-//
-//    @Override
-//    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object object, ModelAndView model) {
-//        System.out.println("postHandle");
-//    }
-
-    static public void logRequestResponse(HttpServletRequest request, HttpServletResponse response) {
         int status = response.getStatus();
-        String s_info = "" + status;
-        s_info += ": " + request.getMethod();
+
+        String s_info = status + ": " + request.getMethod();
         s_info += " " + request.getRequestURI();
         if (request.getQueryString() != null) {
             s_info += "?" + request.getQueryString();
         }
 
         if (status < 400)
-            LOGGER.info(s_info);
+            logger.info(s_info);
         else
-            LOGGER.error(s_info);
+            logger.error(s_info);
     }
+
+    static private Logger _getLogger(@NotNull Object object) {
+        if (object instanceof HandlerMethod) {
+            final Class<?> controllerClass = ((HandlerMethod) object).getBeanType();
+            return LogManager.getLogger(controllerClass);
+        }
+        return LogManager.getLogger();
+    }
+
+    @Override
+    public boolean preHandle(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object object) {
+
+        if (object instanceof HandlerMethod) {
+            final String methodName = ((HandlerMethod) object).getMethod().getName();
+            _getLogger(object).debug("Call '{}()'", methodName);
+        }
+        return true;
+    }
+
+//    @Override
+//    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object object, ModelAndView model) {
+//        System.out.println("postHandle");
+//    }
 
     @Override
     public void afterCompletion(@NotNull HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object object, Exception exception) {
 
-        int status = response.getStatus();
+        Logger logger = _getLogger(object);
+
         if (exception != null) {
-            status = 500;
-            response.setStatus(status);
-            LOGGER.error(exception);
+            response.setStatus(500);
+            logger.error(exception);
         }
 
-        logRequestResponse(request, response);
-
-        if (LOGGER.isDebugEnabled() && object instanceof HandlerMethod) {
-            final Class<?> controllerClass = ((HandlerMethod) object).getBeanType();
-            final String methodName = ((HandlerMethod) object).getMethod().getName();
-            LOGGER.debug("{} -> {}()", controllerClass.getName(), methodName);
-        }
+        logRequestResponse(logger, request, response);
 
     }
 }
