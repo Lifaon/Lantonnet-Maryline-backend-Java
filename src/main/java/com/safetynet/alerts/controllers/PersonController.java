@@ -8,25 +8,27 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/person")
 public class PersonController {
 
     @Autowired
     PersonService _personService;
 
-    @PostMapping("/person")
+    @PostMapping
     public void createPerson(@RequestBody Person person) {
         _personService.createPerson(person);
     }
 
-    @PutMapping("/person")
+    @PutMapping
     public void editPerson(@RequestBody Person person) {
         _personService.editPerson(person);
     }
 
-    @DeleteMapping("/person")
+    @DeleteMapping
     public void deletePerson(PersonName name) {
         _personService.deletePerson(name);
     }

@@ -1,7 +1,7 @@
 .vscode/
 .idea/
 target/
-resources/data.json
+**/resources/data.json
 
 # Compiled class file
 *.class

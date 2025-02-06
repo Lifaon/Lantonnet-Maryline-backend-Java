@@ -10,32 +10,34 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
+@RequestMapping("/firestation")
 public class FirestationController {
 
     @Autowired
     FirestationService _firestationService;
 
-    @GetMapping("/firestation")
+    @GetMapping
     public CoveredPeople getCoveredPeople(@RequestParam String stationNumber) {
         return _firestationService.getCoveredPeople(stationNumber);
     }
 
-    @PostMapping("/firestation")
+    @PostMapping
     public void createFirestation(@RequestBody Firestation firestation) {
         _firestationService.createFirestation(firestation);
     }
 
-    @PutMapping("/firestation")
+    @PutMapping
     public void editFirestation(@RequestBody Firestation firestation) {
         _firestationService.editFirestation(firestation);
     }
 
-    @DeleteMapping("/firestation")
+    @DeleteMapping
     public void deleteFirestation(@RequestParam(required = false) String address,
                                   @RequestParam(required = false) String stationNumber) {
         if (address == null && stationNumber == null) {

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,19 +18,24 @@ import java.util.Optional;
 import java.util.Scanner;
 
 @Configuration()
+@PropertySource("classpath:application.properties")
 public class DBHandle {
 
-    final private String _json_path = "./resources/data.json";
+    final private String _json_path;
     final private ObjectMapper _mapper = new ObjectMapper();
     private ObjectNode _nodes;
 
     final private Logger LOGGER = LogManager.getLogger();
 
-    DBHandle() {
+    DBHandle(
+        @Value("${com.safetynet.alerts.DBHandle.Path}") String path,
+        @Value("${com.safetynet.alerts.DBHandle.OGPath}") String og_path
+    ) {
+        _json_path = path;
         try {
             File f = new File(_json_path);
             if (!f.isFile()) {
-                File og = new File("./resources/og_data.json");
+                File og = new File(og_path);
                 Files.copy(og.toPath(), f.toPath());
                 LOGGER.debug("Copied '{}' to '{}'", og, f);
             }
