@@ -22,15 +22,15 @@ public class PersonService {
 
     public List<Person> getPeopleByAddress(String address) {
         return _personRepository.getAll().stream().filter(
-            person -> person.address.equals(address)
+            person -> person.getAddress().equals(address)
         ).toList();
     }
 
     public Set<String> getCommunityEmail(String city) {
         return _personRepository.getAll().stream().filter(
-            person -> person.city.equals(city)
+            person -> person.getCity().equals(city)
         ).map(
-            person -> person.email
+            Person::getEmail
         ).collect(Collectors.toSet());
     }
 

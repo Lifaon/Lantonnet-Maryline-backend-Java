@@ -21,21 +21,21 @@ public class FirestationService {
 
     public List<String> getAddresses(List<String> stations) {
         return _firestationRepository.getAll().stream().filter(
-            firestation -> stations.contains(firestation.station)
-        ).map(firestation -> firestation.address).toList();
+            firestation -> stations.contains(firestation.getStation())
+        ).map(Firestation::getAddress).toList();
     }
 
     public String getStation(String address) {
         return _firestationRepository.getAll().stream().filter(
-            f -> f.address.equals(address)
-        ).map(firestation -> firestation.station).findFirst().orElse(null);
+            f -> f.getAddress().equals(address)
+        ).map(Firestation::getStation).findFirst().orElse(null);
     }
 
     public List<PersonInfo> getPeopleInfo(String station) {
         final List<PersonInfo> people = new ArrayList<>();
         _firestationRepository.getAll().forEach(firestation ->  {
-            if (firestation.station.equals(station)) {
-                _personService.getPeopleByAddress(firestation.address).forEach(person ->
+            if (firestation.getStation().equals(station)) {
+                _personService.getPeopleByAddress(firestation.getAddress()).forEach(person ->
                     people.add(new PersonInfo(person))
                 );
             }
@@ -46,14 +46,13 @@ public class FirestationService {
     public CoveredPeople getCoveredPeople(String station) {
 
         final CoveredPeople coveredPeople = new CoveredPeople();
-        coveredPeople.people = getPeopleInfo(station);
-
-        coveredPeople.people.forEach(person ->
+        coveredPeople.setPeople(getPeopleInfo(station));
+        coveredPeople.getPeople().forEach(person ->
             _medicalRecordService.getMedicalRecord(person).ifPresent(record -> {
                 if (record.isAdult()) {
-                    coveredPeople.adults++;
+                    coveredPeople.addAdult();
                 } else {
-                    coveredPeople.children++;
+                    coveredPeople.addChild();
                 }
             })
         );

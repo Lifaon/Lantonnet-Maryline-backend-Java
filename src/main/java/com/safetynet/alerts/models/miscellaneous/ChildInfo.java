@@ -1,9 +1,16 @@
 package com.safetynet.alerts.models.miscellaneous;
 
 import com.safetynet.alerts.Utils;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+
+@NoArgsConstructor
+@Setter
+@Getter
 public class ChildInfo extends PersonName {
-    public int age;
+    private int age;
 
     public ChildInfo(PersonName name, int age) {
         Utils.copyFields(PersonName.class, name, this);

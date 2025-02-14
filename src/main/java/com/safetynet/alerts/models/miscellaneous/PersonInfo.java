@@ -1,12 +1,17 @@
 package com.safetynet.alerts.models.miscellaneous;
 
 import com.safetynet.alerts.Utils;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@NoArgsConstructor
+@Setter
+@Getter
 public class PersonInfo extends PersonName {
-    public String address;
-    public String phone;
+    private String address;
+    private String phone;
 
-    public PersonInfo() {};
     public <Child extends PersonInfo> PersonInfo (Child child) {
         Utils.copyFields(PersonInfo.class, child, this);
     }

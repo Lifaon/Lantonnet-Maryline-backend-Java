@@ -1,10 +1,23 @@
 package com.safetynet.alerts.models.miscellaneous;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@NoArgsConstructor
+@Setter
+@Getter
 public class CoveredPeople {
-    public int children = 0;
-    public int adults = 0;
-    public List<PersonInfo> people = new ArrayList<>();
+    private int children = 0;
+    private int adults = 0;
+    private List<PersonInfo> people = new ArrayList<>();
+    public void addChild() {
+        children++;
+    }
+    public void addAdult() {
+        adults++;
+    }
 }

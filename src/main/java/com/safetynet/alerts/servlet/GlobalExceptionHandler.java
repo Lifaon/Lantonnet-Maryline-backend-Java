@@ -5,7 +5,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestValueException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -64,6 +66,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MissingRequestValueException.class)
     public void handleNoResourceFoundException(MissingRequestValueException e) {
+        _process(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public void handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        _process(e, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public void handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         _process(e, HttpStatus.BAD_REQUEST);
     }
 

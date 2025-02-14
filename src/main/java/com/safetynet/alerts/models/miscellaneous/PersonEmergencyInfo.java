@@ -1,6 +1,13 @@
 package com.safetynet.alerts.models.miscellaneous;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@NoArgsConstructor
+@Setter
+@Getter
 public class PersonEmergencyInfo extends MedicalInfo {
-    public String phone;
-    public int age;
+    private String phone;
+    private int age;
 }

@@ -16,12 +16,12 @@ public class FirestationRepository extends BaseRepository<Firestation, String> {
 
     @Override
     public Optional<Firestation> get(String address) {
-        return _models.stream().filter(f -> f.address.equals(address)).findAny();
+        return _models.stream().filter(f -> f.getAddress().equals(address)).findAny();
     }
 
     public void deleteByNumber(String stationNumber) {
         LOGGER.debug("Call 'deleteByNumber()'");
-        if (_models.removeIf(f -> f.station.equals(stationNumber))) {
+        if (_models.removeIf(f -> f.getStation().equals(stationNumber))) {
             _updateDB();
         } else {
             throw new ResponseStatusException(HttpStatus.NO_CONTENT);

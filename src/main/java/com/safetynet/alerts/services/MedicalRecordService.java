@@ -16,7 +16,7 @@ public class MedicalRecordService {
 
     public List<MedicalRecord> getMedicalRecordsFromLastName(String lastName) {
         return _medicalRecordRepository.getAll().stream().filter(
-            medicalRecord -> medicalRecord.lastName.equals(lastName)
+            medicalRecord -> medicalRecord.getLastName().equals(lastName)
         ).toList();
     };
 

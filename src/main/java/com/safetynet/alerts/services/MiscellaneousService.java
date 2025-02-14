@@ -2,6 +2,7 @@ package com.safetynet.alerts.services;
 
 import com.safetynet.alerts.Utils;
 import com.safetynet.alerts.models.miscellaneous.MedicalInfo;
+import com.safetynet.alerts.models.miscellaneous.PersonInfo;
 import com.safetynet.alerts.models.miscellaneous.PersonName;
 import com.safetynet.alerts.models.miscellaneous.ChildAlert;
 import com.safetynet.alerts.models.miscellaneous.ChildInfo;
@@ -32,9 +33,9 @@ public class MiscellaneousService {
         _personService.getPeopleByAddress(address).forEach(name -> {
             _medicalRecordService.getMedicalRecord(name).ifPresent(record -> {
                 if (record.isAdult()) {
-                    childAlert.children.add(new ChildInfo(name, record.getAge()));
+                    childAlert.getChildren().add(new ChildInfo(name, record.getAge()));
                 } else {
-                    childAlert.adults.add(new PersonName(name));
+                    childAlert.getAdults().add(new PersonName(name));
                 }
             });
         });
@@ -43,9 +44,8 @@ public class MiscellaneousService {
     }
 
     public List<String> getPhoneAlert(String firestation) {
-        return _firestationService.getPeopleInfo(firestation).stream().map(
-            personInfo -> personInfo.phone
-        ).toList();
+        return _firestationService.getPeopleInfo(firestation)
+            .stream().map(PersonInfo::getPhone).toList();
     }
 
     private List<PersonEmergencyInfo> _getEmergencyInfo(String address) {
@@ -54,14 +54,14 @@ public class MiscellaneousService {
         _personService.getPeopleByAddress(address).forEach(person -> {
             PersonEmergencyInfo new_person = new PersonEmergencyInfo();
             Utils.copyFields(PersonName.class, person, new_person);
-            new_person.phone = person.phone;
+            new_person.setPhone(person.getPhone());
             people.add(new_person);
         });
 
         people.forEach(person ->
                 _medicalRecordService.getMedicalRecord(person).ifPresent(record -> {
                     Utils.copyDeclaredFields(MedicalInfo.class, record, person);
-                    person.age = record.getAge();
+                    person.setAge(record.getAge());
                 })
         );
 
@@ -91,13 +91,13 @@ public class MiscellaneousService {
         _medicalRecordService.getMedicalRecordsFromLastName(lastName).forEach(record -> {
             PersonMedicalInfo personMedicalInfo = new PersonMedicalInfo();
             Utils.copyFields(MedicalInfo.class, record, personMedicalInfo);
-            personMedicalInfo.age = record.getAge();
+            personMedicalInfo.setAge(record.getAge());
             ret.add(personMedicalInfo);
         });
         ret.forEach(personMedicalInfo ->
             _personService.getPerson(personMedicalInfo).ifPresent(person -> {
-                personMedicalInfo.address = person.address;
-                personMedicalInfo.email = person.email;
+                personMedicalInfo.setAddress(person.getAddress());
+                personMedicalInfo.setEmail(person.getEmail());
             })
         );
         return ret;
