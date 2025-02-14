@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Validated
 @RestController
 @RequestMapping("/person")
 public class PersonController {
@@ -21,12 +20,12 @@ public class PersonController {
     PersonService _personService;
 
     @PostMapping
-    public void createPerson(@RequestBody Person person) {
+    public void createPerson(@Validated @RequestBody Person person) {
         _personService.createPerson(person);
     }
 
     @PutMapping
-    public void editPerson(@RequestBody Person person) {
+    public void editPerson(@Validated @RequestBody Person person) {
         _personService.editPerson(person);
     }
 

@@ -4,6 +4,7 @@ import com.safetynet.alerts.models.MedicalRecord;
 import com.safetynet.alerts.models.miscellaneous.PersonName;
 import com.safetynet.alerts.services.MedicalRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -19,17 +20,17 @@ public class MedicalRecordController {
     MedicalRecordService _medicalRecordService;
 
     @PostMapping
-    public void createMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+    public void createMedicalRecord(@Validated @RequestBody MedicalRecord medicalRecord) {
         _medicalRecordService.createMedicalRecord(medicalRecord);
     }
 
     @PutMapping
-    public void editMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
+    public void editMedicalRecord(@Validated @RequestBody MedicalRecord medicalRecord) {
         _medicalRecordService.editMedicalRecord(medicalRecord);
     }
 
     @DeleteMapping
-    public void deleteMedicalRecord(PersonName name) {
+    public void deleteMedicalRecord(@Validated PersonName name) {
         _medicalRecordService.deleteMedicalRecord(name);
     }
 }

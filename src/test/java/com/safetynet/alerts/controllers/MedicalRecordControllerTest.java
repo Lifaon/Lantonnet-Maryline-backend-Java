@@ -1,9 +1,9 @@
 package com.safetynet.alerts.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.safetynet.alerts.models.Person;
+import com.safetynet.alerts.models.MedicalRecord;
 import com.safetynet.alerts.models.miscellaneous.PersonName;
-import com.safetynet.alerts.services.PersonService;
+import com.safetynet.alerts.services.MedicalRecordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,40 +18,33 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-@WebMvcTest(PersonController.class)
-public class PersonControllerTest {
+@WebMvcTest(MedicalRecordController.class)
+public class MedicalRecordControllerTest {
 
     @MockitoBean
-    private PersonService _personService;
+    private MedicalRecordService _medicalRecordService;
 
     @InjectMocks
-    private PersonController _personController;
+    private MedicalRecordController _medicalRecordController;
 
     @Autowired
     private MockMvc mvc;
 
-    final private String uri = "/person";
+    final private String uri = "/medicalRecord";
 
-    final private Person _person = new Person();
+    final private MedicalRecord _record = new MedicalRecord();
 
     final private ObjectMapper _mapper = new ObjectMapper();
 
     @BeforeEach
     public void setUp() {
-        _person.setFirstName("John");
-        _person.setLastName("Smith");
-        _person.setAddress("Toto");
-        _person.setCity("London");
-        _person.setZip("12345");
-        _person.setEmail("john.smith@gmail.com");
-        _person.setPhone("0606060606");
+        _record.setFirstName("John");
+        _record.setLastName("Smith");
+        _record.setBirthdate("01/01/2000");
     }
 
     @Test
@@ -60,76 +53,76 @@ public class PersonControllerTest {
     }
 
     @Test
-    public void testCreatePerson() throws Exception {
+    public void testCreateMedicalRecord() throws Exception {
         mvc.perform(post(uri)
-            .contentType("application/json")
-            .content(_mapper.writeValueAsString(_person))
+                .contentType("application/json")
+                .content(_mapper.writeValueAsString(_record))
         ).andExpect(status().isOk());
     }
 
     @Test
-    public void testCreatePersonAlreadyExists() throws Exception {
+    public void testCreateMedicalRecordAlreadyExists() throws Exception {
         Mockito.doThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST))
-                .doNothing().when(_personService).createPerson(any(Person.class));
+                .doNothing().when(_medicalRecordService).createMedicalRecord(any(MedicalRecord.class));
 
         mvc.perform(post(uri)
                 .contentType("application/json")
-                .content(_mapper.writeValueAsString(_person))
+                .content(_mapper.writeValueAsString(_record))
         ).andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testCreatePersonNoParam() throws Exception {
+    public void testCreateMedicalRecordNoParam() throws Exception {
         mvc.perform(post(uri)).andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testEditPerson() throws Exception {
+    public void testEditMedicalRecord() throws Exception {
         mvc.perform(put(uri)
-            .contentType("application/json")
-            .content(_mapper.writeValueAsString(_person))
+                .contentType("application/json")
+                .content(_mapper.writeValueAsString(_record))
         ).andExpect(status().isOk());
     }
 
     @Test
-    public void testEditPersonNotPresent() throws Exception {
+    public void testEditMedicalRecordNotPresent() throws Exception {
 
         Mockito.doThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST))
-            .doNothing().when(_personService).editPerson(any(Person.class));
+                .doNothing().when(_medicalRecordService).editMedicalRecord(any(MedicalRecord.class));
 
         mvc.perform(put(uri)
-            .contentType("application/json")
-            .content(_mapper.writeValueAsString(_person))
+                .contentType("application/json")
+                .content(_mapper.writeValueAsString(_record))
         ).andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testEditPersonNoParam() throws Exception {
+    public void testEditMedicalRecordNoParam() throws Exception {
         mvc.perform(put(uri)).andExpect(status().isBadRequest());
     }
 
     @Test
-    public void testDeletePerson() throws Exception {
+    public void testDeleteMedicalRecord() throws Exception {
         mvc.perform(delete(uri)
-            .queryParam("firstName", "John")
-            .queryParam("lastName", "Smith")
+                .queryParam("firstName", "John")
+                .queryParam("lastName", "Smith")
         ).andExpect(status().isOk());
     }
 
     @Test
-    public void testDeletePersonNotPresent() throws Exception {
+    public void testDeleteMedicalRecordNotPresent() throws Exception {
 
         Mockito.doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
-                .doNothing().when(_personService).deletePerson(any(PersonName.class));
+                .doNothing().when(_medicalRecordService).deleteMedicalRecord(any(PersonName.class));
 
         mvc.perform(delete(uri)
-            .queryParam("firstName", "John")
-            .queryParam("lastName", "Smith")
+                .queryParam("firstName", "John")
+                .queryParam("lastName", "Smith")
         ).andExpect(status().isNoContent());
     }
 
     @Test
-    public void testDeletePersonNoParam() throws Exception {
+    public void testDeleteMedicalRecordNoParam() throws Exception {
         mvc.perform(delete(uri)).andExpect(status().isBadRequest());
     }
 

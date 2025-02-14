@@ -5,6 +5,7 @@ import com.safetynet.alerts.models.miscellaneous.CoveredPeople;
 import com.safetynet.alerts.services.FirestationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,12 +29,12 @@ public class FirestationController {
     }
 
     @PostMapping
-    public void createFirestation(@RequestBody Firestation firestation) {
+    public void createFirestation(@Validated @RequestBody Firestation firestation) {
         _firestationService.createFirestation(firestation);
     }
 
     @PutMapping
-    public void editFirestation(@RequestBody Firestation firestation) {
+    public void editFirestation(@Validated @RequestBody Firestation firestation) {
         _firestationService.editFirestation(firestation);
     }
 

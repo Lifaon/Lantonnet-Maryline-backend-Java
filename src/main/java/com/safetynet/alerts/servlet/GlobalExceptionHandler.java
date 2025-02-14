@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MissingRequestValueException.class)
-    public void handleNoResourceFoundException(MissingRequestValueException e) {
+    public void handleBadRequest(MissingRequestValueException e) {
         _process(e, HttpStatus.BAD_REQUEST);
     }
 
