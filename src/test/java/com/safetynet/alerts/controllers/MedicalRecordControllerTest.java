@@ -63,7 +63,7 @@ public class MedicalRecordControllerTest {
     @Test
     public void testCreateMedicalRecordAlreadyExists() throws Exception {
         Mockito.doThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST))
-                .doNothing().when(_medicalRecordService).createMedicalRecord(any(MedicalRecord.class));
+                .doNothing().when(_medicalRecordService).create(any(MedicalRecord.class));
 
         mvc.perform(post(uri)
                 .contentType("application/json")
@@ -88,7 +88,7 @@ public class MedicalRecordControllerTest {
     public void testEditMedicalRecordNotPresent() throws Exception {
 
         Mockito.doThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST))
-                .doNothing().when(_medicalRecordService).editMedicalRecord(any(MedicalRecord.class));
+                .doNothing().when(_medicalRecordService).edit(any(MedicalRecord.class));
 
         mvc.perform(put(uri)
                 .contentType("application/json")
@@ -113,7 +113,7 @@ public class MedicalRecordControllerTest {
     public void testDeleteMedicalRecordNotPresent() throws Exception {
 
         Mockito.doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
-                .doNothing().when(_medicalRecordService).deleteMedicalRecord(any(PersonName.class));
+                .doNothing().when(_medicalRecordService).delete(any(PersonName.class));
 
         mvc.perform(delete(uri)
                 .queryParam("firstName", "John")

@@ -70,7 +70,7 @@ public class PersonControllerTest {
     @Test
     public void testCreatePersonAlreadyExists() throws Exception {
         Mockito.doThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST))
-                .doNothing().when(_personService).createPerson(any(Person.class));
+                .doNothing().when(_personService).create(any(Person.class));
 
         mvc.perform(post(uri)
                 .contentType("application/json")
@@ -95,7 +95,7 @@ public class PersonControllerTest {
     public void testEditPersonNotPresent() throws Exception {
 
         Mockito.doThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST))
-            .doNothing().when(_personService).editPerson(any(Person.class));
+            .doNothing().when(_personService).edit(any(Person.class));
 
         mvc.perform(put(uri)
             .contentType("application/json")
@@ -120,7 +120,7 @@ public class PersonControllerTest {
     public void testDeletePersonNotPresent() throws Exception {
 
         Mockito.doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
-                .doNothing().when(_personService).deletePerson(any(PersonName.class));
+                .doNothing().when(_personService).delete(any(PersonName.class));
 
         mvc.perform(delete(uri)
             .queryParam("firstName", "John")

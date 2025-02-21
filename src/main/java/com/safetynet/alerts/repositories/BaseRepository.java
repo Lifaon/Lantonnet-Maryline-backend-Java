@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class BaseRepository <Model extends Identifier<IdentifierType>, IdentifierType> {
+public abstract class BaseRepository <Model extends Identifier<T>, T> {
     @Autowired
     private DBHandle _dbHandle;
     private final String _dbKey;
@@ -45,7 +45,7 @@ public abstract class BaseRepository <Model extends Identifier<IdentifierType>, 
         return Collections.unmodifiableList(_models);
     };
 
-    public abstract Optional<Model> get(IdentifierType param);
+    public abstract Optional<Model> get(T param);
 
     public void create(Model model) {
         LOGGER.debug("Call 'create()'");
@@ -66,7 +66,7 @@ public abstract class BaseRepository <Model extends Identifier<IdentifierType>, 
         });
     };
 
-    public void delete(IdentifierType param) {
+    public void delete(T param) {
         LOGGER.debug("Call 'delete()'");
         get(param).ifPresentOrElse(model -> {
             _models.remove(model);

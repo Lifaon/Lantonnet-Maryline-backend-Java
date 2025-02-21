@@ -31,7 +31,7 @@ public class MiscellaneousService {
         ChildAlert childAlert = new ChildAlert();
 
         _personService.getPeopleByAddress(address).forEach(name -> {
-            _medicalRecordService.getMedicalRecord(name).ifPresent(record -> {
+            _medicalRecordService.get(name).ifPresent(record -> {
                 if (record.isAdult()) {
                     childAlert.getChildren().add(new ChildInfo(name, record.getAge()));
                 } else {
@@ -59,7 +59,7 @@ public class MiscellaneousService {
         });
 
         people.forEach(person ->
-                _medicalRecordService.getMedicalRecord(person).ifPresent(record -> {
+                _medicalRecordService.get(person).ifPresent(record -> {
                     Utils.copyDeclaredFields(MedicalInfo.class, record, person);
                     person.setAge(record.getAge());
                 })
@@ -95,7 +95,7 @@ public class MiscellaneousService {
             ret.add(personMedicalInfo);
         });
         ret.forEach(personMedicalInfo ->
-            _personService.getPerson(personMedicalInfo).ifPresent(person -> {
+            _personService.get(personMedicalInfo).ifPresent(person -> {
                 personMedicalInfo.setAddress(person.getAddress());
                 personMedicalInfo.setEmail(person.getEmail());
             })

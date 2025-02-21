@@ -75,7 +75,7 @@ public class FirestationControllerTest {
     @Test
     public void testCreateFirestationAlreadyExists() throws Exception {
         Mockito.doThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST))
-                .doNothing().when(_firestationService).createFirestation(any(Firestation.class));
+                .doNothing().when(_firestationService).create(any(Firestation.class));
 
         mvc.perform(post(uri)
                 .contentType("application/json")
@@ -100,7 +100,7 @@ public class FirestationControllerTest {
     public void testEditFirestationNotPresent() throws Exception {
 
         Mockito.doThrow(new ResponseStatusException(HttpStatus.BAD_REQUEST))
-                .doNothing().when(_firestationService).editFirestation(any(Firestation.class));
+                .doNothing().when(_firestationService).edit(any(Firestation.class));
 
         mvc.perform(put(uri)
                 .contentType("application/json")
@@ -131,7 +131,7 @@ public class FirestationControllerTest {
     public void testDeleteFirestationNotPresent() throws Exception {
 
         Mockito.doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
-                .doNothing().when(_firestationService).deleteFirestation(any(String.class));
+                .doNothing().when(_firestationService).delete(any(String.class));
 
         mvc.perform(delete(uri)
             .queryParam("address", "Toto")
@@ -142,7 +142,7 @@ public class FirestationControllerTest {
     public void testDeleteFirestationsByNumberNotPresent() throws Exception {
 
         Mockito.doThrow(new ResponseStatusException(HttpStatus.NO_CONTENT))
-                .doNothing().when(_firestationService).deleteFirestationsByNumber(any(String.class));
+                .doNothing().when(_firestationService).deleteByNumber(any(String.class));
 
         mvc.perform(delete(uri)
             .queryParam("stationNumber", "1")

@@ -1,8 +1,8 @@
 package com.safetynet.alerts.services;
 
 import com.safetynet.alerts.models.Firestation;
-import com.safetynet.alerts.models.miscellaneous.PersonInfo;
 import com.safetynet.alerts.models.miscellaneous.CoveredPeople;
+import com.safetynet.alerts.models.miscellaneous.PersonInfo;
 import com.safetynet.alerts.repositories.FirestationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,29 +11,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FirestationService {
-    @Autowired
-    private FirestationRepository _firestationRepository;
+public class FirestationService extends BaseService<Firestation, String, FirestationRepository> {
     @Autowired
     private PersonService _personService;
     @Autowired
     private MedicalRecordService _medicalRecordService;
 
     public List<String> getAddresses(List<String> stations) {
-        return _firestationRepository.getAll().stream().filter(
+        return _repository.getAll().stream().filter(
             firestation -> stations.contains(firestation.getStation())
         ).map(Firestation::getAddress).toList();
     }
 
     public String getStation(String address) {
-        return _firestationRepository.getAll().stream().filter(
-            f -> f.getAddress().equals(address)
-        ).map(Firestation::getStation).findFirst().orElse(null);
+        return _repository.get(address).map(Firestation::getStation).orElse(null);
     }
 
     public List<PersonInfo> getPeopleInfo(String station) {
         final List<PersonInfo> people = new ArrayList<>();
-        _firestationRepository.getAll().forEach(firestation ->  {
+        _repository.getAll().forEach(firestation ->  {
             if (firestation.getStation().equals(station)) {
                 _personService.getPeopleByAddress(firestation.getAddress()).forEach(person ->
                     people.add(new PersonInfo(person))
@@ -48,7 +44,7 @@ public class FirestationService {
         final CoveredPeople coveredPeople = new CoveredPeople();
         coveredPeople.setPeople(getPeopleInfo(station));
         coveredPeople.getPeople().forEach(person ->
-            _medicalRecordService.getMedicalRecord(person).ifPresent(record -> {
+            _medicalRecordService.get(person).ifPresent(record -> {
                 if (record.isAdult()) {
                     coveredPeople.addAdult();
                 } else {
@@ -60,20 +56,8 @@ public class FirestationService {
         return coveredPeople;
     };
 
-    public void createFirestation(Firestation p) {
-        _firestationRepository.create(p);
-    };
-
-    public void editFirestation(Firestation p) {
-        _firestationRepository.edit(p);
-    };
-
-    public void deleteFirestation(String address) {
-        _firestationRepository.delete(address);
-    };
-
-    public void deleteFirestationsByNumber(String stationNumber) {
-        _firestationRepository.deleteByNumber(stationNumber);
+    public void deleteByNumber(String stationNumber) {
+        _repository.deleteByNumber(stationNumber);
     };
 
 }

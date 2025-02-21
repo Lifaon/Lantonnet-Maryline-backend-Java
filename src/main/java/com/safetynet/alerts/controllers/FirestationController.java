@@ -3,14 +3,9 @@ package com.safetynet.alerts.controllers;
 import com.safetynet.alerts.models.Firestation;
 import com.safetynet.alerts.models.miscellaneous.CoveredPeople;
 import com.safetynet.alerts.services.FirestationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,29 +13,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @RequestMapping("/firestation")
-public class FirestationController {
-
-    @Autowired
-    FirestationService _firestationService;
+public class FirestationController extends BaseController<Firestation, String, FirestationService>  {
 
     @GetMapping
     public CoveredPeople getCoveredPeople(@RequestParam String stationNumber) {
-        return _firestationService.getCoveredPeople(stationNumber);
-    }
-
-    @PostMapping
-    public void createFirestation(@Validated @RequestBody Firestation firestation) {
-        _firestationService.createFirestation(firestation);
-    }
-
-    @PutMapping
-    public void editFirestation(@Validated @RequestBody Firestation firestation) {
-        _firestationService.editFirestation(firestation);
+        return _service.getCoveredPeople(stationNumber);
     }
 
     @DeleteMapping
-    public void deleteFirestation(@RequestParam(required = false) String address,
-                                  @RequestParam(required = false) String stationNumber) {
+    public void delete(@RequestParam(required = false) String address,
+                       @RequestParam(required = false) String stationNumber) {
         if (address == null && stationNumber == null) {
             throw new ResponseStatusException(
                 HttpStatus.BAD_REQUEST,
@@ -49,9 +31,9 @@ public class FirestationController {
         }
 
         if (address != null) {
-            _firestationService.deleteFirestation(address);
+            _service.delete(address);
         } else {
-            _firestationService.deleteFirestationsByNumber(stationNumber);
+            _service.deleteByNumber(stationNumber);
         }
     }
 }
