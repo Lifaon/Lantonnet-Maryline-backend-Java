@@ -15,6 +15,10 @@ import org.springframework.web.server.ResponseStatusException;
 @RequestMapping("/firestation")
 public class FirestationController extends BaseController<Firestation, String, FirestationService>  {
 
+    FirestationController(FirestationService service) {
+        super(service);
+    }
+
     @GetMapping
     public CoveredPeople getCoveredPeople(@RequestParam String stationNumber) {
         return _service.getCoveredPeople(stationNumber);

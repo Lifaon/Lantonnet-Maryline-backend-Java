@@ -1,15 +1,15 @@
 package com.safetynet.alerts.services;
 
 import com.safetynet.alerts.Utils;
-import com.safetynet.alerts.models.miscellaneous.MedicalInfo;
-import com.safetynet.alerts.models.miscellaneous.PersonInfo;
-import com.safetynet.alerts.models.miscellaneous.PersonName;
 import com.safetynet.alerts.models.miscellaneous.ChildAlert;
 import com.safetynet.alerts.models.miscellaneous.ChildInfo;
+import com.safetynet.alerts.models.miscellaneous.MedicalInfo;
 import com.safetynet.alerts.models.miscellaneous.PersonEmergencyInfo;
+import com.safetynet.alerts.models.miscellaneous.PersonInfo;
 import com.safetynet.alerts.models.miscellaneous.PersonMedicalInfo;
+import com.safetynet.alerts.models.miscellaneous.PersonName;
 import javafx.util.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,13 +19,11 @@ import java.util.Map;
 import java.util.Set;
 
 @Service
+@RequiredArgsConstructor
 public class MiscellaneousService {
-    @Autowired
-    PersonService _personService;
-    @Autowired
-    MedicalRecordService _medicalRecordService;
-    @Autowired
-    FirestationService _firestationService;
+    private final PersonService _personService;
+    private final MedicalRecordService _medicalRecordService;
+    private final FirestationService _firestationService;
 
     public ChildAlert getChildAlert(String address) {
         ChildAlert childAlert = new ChildAlert();

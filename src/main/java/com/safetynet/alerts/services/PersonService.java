@@ -12,17 +12,22 @@ import java.util.stream.Collectors;
 @Service
 public class PersonService extends BaseService<Person, PersonName, PersonRepository> {
 
+    PersonService(PersonRepository repository) {
+        super(repository);
+    }
+
     public List<Person> getPeopleByAddress(String address) {
         return _repository.getAll().stream().filter(
-            person -> person.getAddress().equals(address)
+                person -> person.getAddress().equals(address)
         ).toList();
     }
 
     public Set<String> getCommunityEmail(String city) {
         return _repository.getAll().stream().filter(
-            person -> person.getCity().equals(city)
+                person -> person.getCity().equals(city)
         ).map(
-            Person::getEmail
+                Person::getEmail
         ).collect(Collectors.toSet());
     }
 }
+

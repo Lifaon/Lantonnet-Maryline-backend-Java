@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/person")
 public class PersonController extends BaseController<Person, PersonName, PersonService> {
+
+    PersonController(PersonService service) {
+        super(service);
+    }
+
     @DeleteMapping
     public void delete(@Validated PersonName param) {
         _service.delete(param);

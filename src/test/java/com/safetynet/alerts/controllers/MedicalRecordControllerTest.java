@@ -7,7 +7,6 @@ import com.safetynet.alerts.services.MedicalRecordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +26,6 @@ public class MedicalRecordControllerTest {
 
     @MockitoBean
     private MedicalRecordService _medicalRecordService;
-
-    @InjectMocks
-    private MedicalRecordController _medicalRecordController;
 
     @Autowired
     private MockMvc mvc;

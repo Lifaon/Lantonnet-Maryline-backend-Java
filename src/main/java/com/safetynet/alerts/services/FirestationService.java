@@ -4,7 +4,6 @@ import com.safetynet.alerts.models.Firestation;
 import com.safetynet.alerts.models.miscellaneous.CoveredPeople;
 import com.safetynet.alerts.models.miscellaneous.PersonInfo;
 import com.safetynet.alerts.repositories.FirestationRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,10 +11,14 @@ import java.util.List;
 
 @Service
 public class FirestationService extends BaseService<Firestation, String, FirestationRepository> {
-    @Autowired
-    private PersonService _personService;
-    @Autowired
-    private MedicalRecordService _medicalRecordService;
+    private final PersonService _personService;
+    private final MedicalRecordService _medicalRecordService;
+
+    FirestationService(PersonService personService, MedicalRecordService medicalRecordService, FirestationRepository repository) {
+        super(repository);
+        _personService = personService;
+        _medicalRecordService = medicalRecordService;
+    }
 
     public List<String> getAddresses(List<String> stations) {
         return _repository.getAll().stream().filter(

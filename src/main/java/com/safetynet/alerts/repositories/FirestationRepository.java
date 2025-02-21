@@ -1,5 +1,6 @@
 package com.safetynet.alerts.repositories;
 
+import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.models.Firestation;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
@@ -10,8 +11,8 @@ import java.util.Optional;
 @Repository
 public class FirestationRepository extends BaseRepository<Firestation, String> {
 
-    FirestationRepository() {
-        super("firestations", Firestation[].class);
+    FirestationRepository(DBHandle handle) {
+        super(handle, "firestations", Firestation[].class);
     }
 
     @Override

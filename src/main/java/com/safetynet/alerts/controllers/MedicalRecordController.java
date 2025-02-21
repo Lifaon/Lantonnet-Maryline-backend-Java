@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/medicalRecord")
 public class MedicalRecordController extends BaseController<MedicalRecord, PersonName, MedicalRecordService> {
+
+    MedicalRecordController(MedicalRecordService service) {
+        super(service);
+    }
+
     @DeleteMapping
     public void delete(@Validated PersonName param) {
         _service.delete(param);

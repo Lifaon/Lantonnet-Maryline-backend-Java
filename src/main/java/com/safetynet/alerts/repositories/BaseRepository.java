@@ -3,9 +3,9 @@ package com.safetynet.alerts.repositories;
 import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.models.Identifier;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -15,19 +15,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public abstract class BaseRepository <Model extends Identifier<T>, T> {
-    @Autowired
-    private DBHandle _dbHandle;
+
+    private final DBHandle _dbHandle;
     private final String _dbKey;
     private final Class<Model[]> _dbFmt;
 
     protected final List<Model> _models = new ArrayList<>();
     protected final Logger LOGGER = LogManager.getLogger(this);
-
-    BaseRepository(String dbKey, Class<Model[]> dbFmt) {
-        _dbKey = dbKey;
-        _dbFmt = dbFmt;
-    }
 
     @PostConstruct
     private void _init() {

@@ -2,14 +2,14 @@ package com.safetynet.alerts.services;
 
 import com.safetynet.alerts.models.Identifier;
 import com.safetynet.alerts.repositories.BaseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
 public abstract class BaseService <Model extends Identifier<T>, T, Repository extends BaseRepository<Model, T>> {
 
-    @Autowired
-    protected Repository _repository;
+    protected final Repository _repository;
 
     public Optional<Model> get(T param) {
         return _repository.get(param);

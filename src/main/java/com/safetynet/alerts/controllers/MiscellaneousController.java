@@ -5,7 +5,7 @@ import com.safetynet.alerts.models.miscellaneous.PersonEmergencyInfo;
 import com.safetynet.alerts.models.miscellaneous.PersonMedicalInfo;
 import com.safetynet.alerts.services.MiscellaneousService;
 import javafx.util.Pair;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.Set;
 
 @RestController
+@RequiredArgsConstructor
 public class MiscellaneousController {
-    @Autowired
-    MiscellaneousService _miscellaneousService;
+    private final MiscellaneousService _miscellaneousService;
 
     @GetMapping("/childAlert")
     public ChildAlert getChildAlert(@RequestParam String address) {

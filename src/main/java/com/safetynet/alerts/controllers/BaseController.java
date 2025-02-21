@@ -3,16 +3,16 @@ package com.safetynet.alerts.controllers;
 import com.safetynet.alerts.models.Identifier;
 import com.safetynet.alerts.repositories.BaseRepository;
 import com.safetynet.alerts.services.BaseService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+@RequiredArgsConstructor
 public abstract class BaseController <Model extends Identifier<T>, T, Service extends BaseService<Model, T, ? extends BaseRepository<Model, T>>> {
 
-    @Autowired
-    protected Service _service;
+    protected final Service _service;
 
     @PostMapping
     public void create(@Validated @RequestBody Model model) {

@@ -1,5 +1,6 @@
 package com.safetynet.alerts.repositories;
 
+import com.safetynet.alerts.DBHandle;
 import com.safetynet.alerts.models.MedicalRecord;
 import com.safetynet.alerts.models.miscellaneous.PersonName;
 import org.springframework.stereotype.Repository;
@@ -9,8 +10,8 @@ import java.util.Optional;
 @Repository
 public class MedicalRecordRepository extends BaseRepository<MedicalRecord, PersonName> {
 
-    MedicalRecordRepository() {
-        super("medicalrecords", MedicalRecord[].class);
+    MedicalRecordRepository(DBHandle handle) {
+        super(handle, "medicalrecords", MedicalRecord[].class);
     }
 
     @Override
