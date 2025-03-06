@@ -31,9 +31,9 @@ public class MiscellaneousService {
         _personService.getPeopleByAddress(address).forEach(name -> {
             _medicalRecordService.get(name).ifPresent(record -> {
                 if (record.isAdult()) {
-                    childAlert.getChildren().add(new ChildInfo(name, record.getAge()));
-                } else {
                     childAlert.getAdults().add(new PersonName(name));
+                } else {
+                    childAlert.getChildren().add(new ChildInfo(name, record.getAge()));
                 }
             });
         });
@@ -50,18 +50,14 @@ public class MiscellaneousService {
         List<PersonEmergencyInfo> people = new ArrayList<>();
 
         _personService.getPeopleByAddress(address).forEach(person -> {
-            PersonEmergencyInfo new_person = new PersonEmergencyInfo();
-            Utils.copyFields(PersonName.class, person, new_person);
-            new_person.setPhone(person.getPhone());
-            people.add(new_person);
+            PersonEmergencyInfo personInfo = new PersonEmergencyInfo();
+            _medicalRecordService.get(person).ifPresent(record -> {
+                Utils.copyFields(MedicalInfo.class, record, personInfo);
+                personInfo.setAge(record.getAge());
+            });
+            personInfo.setPhone(person.getPhone());
+            people.add(personInfo);
         });
-
-        people.forEach(person ->
-                _medicalRecordService.get(person).ifPresent(record -> {
-                    Utils.copyDeclaredFields(MedicalInfo.class, record, person);
-                    person.setAge(record.getAge());
-                })
-        );
 
         return people;
     }
@@ -89,15 +85,13 @@ public class MiscellaneousService {
         _medicalRecordService.getMedicalRecordsFromLastName(lastName).forEach(record -> {
             PersonMedicalInfo personMedicalInfo = new PersonMedicalInfo();
             Utils.copyFields(MedicalInfo.class, record, personMedicalInfo);
+            _personService.get(record).ifPresent(person -> {
+                personMedicalInfo.setAddress(person.getAddress());
+                personMedicalInfo.setEmail(person.getEmail());
+            });
             personMedicalInfo.setAge(record.getAge());
             ret.add(personMedicalInfo);
         });
-        ret.forEach(personMedicalInfo ->
-            _personService.get(personMedicalInfo).ifPresent(person -> {
-                personMedicalInfo.setAddress(person.getAddress());
-                personMedicalInfo.setEmail(person.getEmail());
-            })
-        );
         return ret;
     }
 
