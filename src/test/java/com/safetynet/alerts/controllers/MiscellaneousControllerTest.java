@@ -125,4 +125,24 @@ public class MiscellaneousControllerTest {
             .andExpect(content().json(_mapper.writeValueAsString(emails)));
     }
 
+    @Test
+    public void getUnknownUriTest() throws Exception {
+        mvc.perform(get("/TotoTutuTata"))
+            .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void getMissingParametersTest() throws Exception {
+        mvc.perform(get("/fire"))
+            .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void getInternalErrorTest() throws Exception {
+        when(service.getFireInfo(any())).thenThrow(new RuntimeException());
+        mvc.perform(get("/fire")
+            .queryParam("address", "toto"))
+            .andExpect(status().isInternalServerError());
+    }
+
 }
