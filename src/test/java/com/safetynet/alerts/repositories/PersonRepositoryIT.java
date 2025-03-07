@@ -1,7 +1,6 @@
-package com.safetynet.alerts.integration;
+package com.safetynet.alerts.repositories;
 
-import com.safetynet.alerts.models.MedicalRecord;
-import com.safetynet.alerts.repositories.MedicalRecordRepository;
+import com.safetynet.alerts.models.Person;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
@@ -24,20 +23,22 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @PropertySource("classpath:application.properties")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class MedicalRecordRepositoryIT {
+public class PersonRepositoryIT {
 
     @Autowired
-    private MedicalRecordRepository repository;
+    private PersonRepository repository;
 
-    static final private MedicalRecord _record = new MedicalRecord();
+    static final private Person _person = new Person();
 
     @BeforeAll
     static public void setUp() {
-        _record.setFirstName("John");
-        _record.setLastName("Smith");
-        _record.setBirthdate("01/01/1980");
-        _record.setAllergies(List.of("Peanuts"));
-        _record.setMedications(List.of("Estradiol"));
+        _person.setFirstName("John");
+        _person.setLastName("Smith");
+        _person.setAddress("Toto");
+        _person.setCity("London");
+        _person.setZip("12345");
+        _person.setEmail("john.smith@gmail.com");
+        _person.setPhone("0606060606");
     }
 
     @AfterAll
@@ -56,9 +57,9 @@ public class MedicalRecordRepositoryIT {
     @Test
     @Order(10)
     public void createTest() {
-        repository.create(_record);
-        assertEquals(repository.getAll(), List.of(_record));
-        assertEquals(repository.get(_record), Optional.of(_record));
+        repository.create(_person);
+        assertEquals(repository.getAll(), List.of(_person));
+        assertEquals(repository.get(_person), Optional.of(_person));
     }
 
     @Test
@@ -66,39 +67,41 @@ public class MedicalRecordRepositoryIT {
     public void createDuplicateTest() {
         assertThrows(
             ResponseStatusException.class,
-            () -> repository.create(_record)
+            () -> repository.create(_person)
         );
     }
 
     @Test
     @Order(20)
     public void editTest() {
-        _record.setBirthdate("01/01/2020");
-        _record.setAllergies(List.of());
-        _record.setMedications(List.of());
-        repository.edit(_record);
-        assertEquals(repository.getAll(), List.of(_record));
-        assertEquals(repository.get(_record), Optional.of(_record));
+        _person.setAddress("New Address");
+        _person.setCity("New City");
+        _person.setZip("New Zip");
+        _person.setPhone("New Phone");
+        _person.setEmail("New Email");
+        repository.edit(_person);
+        assertEquals(repository.getAll(), List.of(_person));
+        assertEquals(repository.get(_person), Optional.of(_person));
     }
 
     @Test
     @Order(21)
     public void editNotFoundTest() {
-        MedicalRecord record = new MedicalRecord();
-        record.setFirstName("Bob");
-        record.setLastName("Smith");
+        Person person = new Person();
+        person.setFirstName("Bob");
+        person.setLastName("Smith");
         assertThrows(
             ResponseStatusException.class,
-            () -> repository.edit(record)
+            () -> repository.edit(person)
         );
     }
 
     @Test
     @Order(30)
     public void deleteTest() {
-        repository.delete(_record);
+        repository.delete(_person);
         assertTrue(repository.getAll().isEmpty());
-        assertTrue(repository.get(_record).isEmpty());
+        assertTrue(repository.get(_person).isEmpty());
     }
 
     @Test
@@ -106,7 +109,7 @@ public class MedicalRecordRepositoryIT {
     public void deleteNotFoundTest() {
         assertThrows(
             ResponseStatusException.class,
-            () -> repository.delete(_record)
+            () -> repository.delete(_person)
         );
     }
 }

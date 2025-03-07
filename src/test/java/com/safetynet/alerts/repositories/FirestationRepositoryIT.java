@@ -1,7 +1,6 @@
-package com.safetynet.alerts.integration;
+package com.safetynet.alerts.repositories;
 
 import com.safetynet.alerts.models.Firestation;
-import com.safetynet.alerts.repositories.FirestationRepository;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
